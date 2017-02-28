@@ -24,11 +24,15 @@ class ConfigController extends ControllerBase
 		
 		$semantic=$this->semantic;
 		
+		$dd=$semantic->htmlDropdown("dd","Machine")->asSelect("machine");
+		$dd->addItem(["test"]);
+		
+		
 		$btnValider = $semantic->htmlButton("btnValider","Valider","ui green button")->getOnClick("Config/liste","#liste");
 		$btnValider->addIcon("checkmark icon");
 		$host=$this->request->getPost("#host");
 		$this->jquery->compile($this->view);
-		
+
 	}
 	public function listeAction(){
 		if ($this->request->isPost()) {

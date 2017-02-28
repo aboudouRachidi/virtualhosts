@@ -3,7 +3,7 @@
 
 
 <form action="{{ url("Config/liste") }}" class="ui form" method="POST" id='frm'>
-<h4 class="ui dividing header">Recherche les VirtualHosts d'une machine ...</h4>
+<h4 class="ui dividing header">Selectionnez une machine</h4>
 <label>Utilisateur : </label> </br>
 <div class="ui  disabled dropdown">
 {{ user.getEmail() }} 
@@ -20,6 +20,7 @@
             <option value="{{ host.getId() }}">{{ host.getName() }}</option>
             {% endif %}
 		{% endfor %}
+		
 		<option value="rien">Je ne posséde aucune machine</option>
           </select>
 	</div>	
@@ -32,7 +33,9 @@
 
 
 </br>
-
+{{ q["dd"] }}
+<br/>
+<br/>
 {{ q["btnValider"] }}
 </br>
 </br>
