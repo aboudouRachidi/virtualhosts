@@ -25,6 +25,6 @@ return new \Phalcon\Config([
         'pluginsDir'     => APP_PATH . '/plugins/',
         'libraryDir'     => APP_PATH . '/library/',
         'cacheDir'       => BASE_PATH . '/cache/',
-        'baseUri'        => '/virtualhosts/',
+        'baseUri'        => '/virtualhosts-ARAY/',
     ]
 ]);
