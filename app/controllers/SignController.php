@@ -1,5 +1,6 @@
 <?php
 class SignController extends ControllerBase{
+	
 	public function indexAction(){
 	
 		$this->secondaryMenu($this->controller,$this->action);
@@ -46,7 +47,7 @@ class SignController extends ControllerBase{
 		}
 		
 		User::create( $_POST, $toCreate );		
-		$ms2=$semantic->htmlMessage ( "okMsg", "Vous êtes bien inscrit !" );
+		$ms2=$semantic->htmlMessage ( "okMsg", "Vous ï¿½tes bien inscrit !" );
 		$ms2->addHeader ( " Succes !");
 		$ms2->setStyle ( "positive" );
 		echo $ms2;

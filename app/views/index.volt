@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 <title>Phalcon PHP Framework</title>
-{{stylesheet_link("https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.6/semantic.min.css")}}
+{{stylesheet_link("https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.9/semantic.min.css")}}
 {{stylesheet_link("https://cdnjs.cloudflare.com/ajax/libs/prism/1.5.1/themes/prism-okaidia.min.css")}}
 {{stylesheet_link("public/css/styles.css")}}
 {{javascript_include("https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js")}}
@@ -21,8 +21,23 @@
 					<i class="snapchat ghost big link icon"></i>
 					Virtualhosts
 				</div>
-				<a class="item">Features</a> <a class="item">Testimonials</a> <a
-					class="item">Sign-in</a>
+				{% if this.session.has("auth") %}
+				
+				<a class="item">Features</a>
+				<a class="item">Testimonials</a> 
+				<a href={{ url("Accueil/logout") }} class="item">Déconnexion</a>
+				
+				{% else %}
+				
+				<a href={{ url("Accueil/signIn") }} class="item">Connexion</a>
+				<a href={{ url("Accueil/signUp") }} class="item">Inscription</a>
+				
+				<div class="item">
+                  Connexion en tant que 
+                 <a href={{ url("Accueil/asAdmin") }} class="item">Administrateur</a>
+                 <a href={{ url("Accueil/asUser") }} class="item">Utilisateur</a>
+                 </div>
+				{% endif %}
 			</div>
 		</div>
 	</header>

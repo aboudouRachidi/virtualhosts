@@ -14,7 +14,15 @@ class ControllerBase extends Controller{
 	 * @property \Ajax\Semantic;
 	 */
 	protected $semantic;
-
+	public function initialize()
+	{
+	
+		if (!$this->session->has('auth') && $this->dispatcher->getActionName()!=="signIn") {
+			//$this->jquery->get("Accueil/connect","#content-container");
+			//$this->dispatcher->forward(array("controller" => "Accueil", "action" => "signIn"));
+			$this->response->redirect("Accueil/signIn");
+		}
+	}
 	public function beforeExecuteRoute(Dispatcher $dispatcher){
 		if($this->request->isAjax()){
 			$this->view->setRenderLevel(View::LEVEL_ACTION_VIEW);
