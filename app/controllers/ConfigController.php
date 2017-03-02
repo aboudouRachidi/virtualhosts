@@ -17,7 +17,7 @@ class ConfigController extends ControllerBase
 		$this->view->setVars(["hosts"=>$hosts]);
 		
 		$user = $this->session->auth;
-		$user = User::findFirst($user["id"]);
+		$user = User::findFirst($user->getId());
 		
 		$virtualhosts=Virtualhost::find();
 		$this->view->setVars(["virtualhosts"=>$virtualhosts,"user"=>$user]);
