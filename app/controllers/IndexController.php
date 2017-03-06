@@ -17,7 +17,10 @@ class IndexController extends ControllerBase{
 		$semantic->htmlButton("btTmp","Accès aux US","purple")->getOnClick("Tmp/index","#file");
 		$btEx=$semantic->htmlButton("btEx","Test des échanges client/serveur")->getOnClick("ServerExchange/index","#file");
 		$btEx->addLabel("New");
-
+		
+		$user = $this->session->get("auth");
+		$this->view->setVar("user", $user);
+		
 		$this->jquery->compile($this->view);
     }
 

@@ -8,12 +8,14 @@
 <title>Phalcon PHP Framework</title>
 {{stylesheet_link("https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.9/semantic.min.css")}}
 {{stylesheet_link("https://cdnjs.cloudflare.com/ajax/libs/prism/1.5.1/themes/prism-okaidia.min.css")}}
+<link rel="stylesheet" href="https://www.w3schools.com/lib/w3.css">
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
 {{stylesheet_link("public/css/styles.css")}}
 {{javascript_include("https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js")}}
 
 </head>
 <body>
-	<header class="navbar navbar-static-top bs-docs-nav" id="top"
+	<header class="ui fixed inverted menu bs-docs-nav" id="top"
 		role="banner">
 		<div class="ui container">
 			<div class="ui menu secondary">
@@ -32,11 +34,17 @@
 				<a href={{ url("Accueil/signIn") }} class="item">Connexion</a>
 				<a href={{ url("Accueil/signUp") }} class="item">Inscription</a>
 				
-				<div class="item">
-                  Connexion en tant que 
-                 <a href={{ url("Accueil/asAdmin") }} class="item">Administrateur</a>
-                 <a href={{ url("Accueil/asUser") }} class="item">Utilisateur</a>
-                 </div>
+                <div class="w3-container item">
+                  <div class="w3-dropdown-hover">
+                    <button class="w3-button">Connexion en tant que
+                    <i class="fa fa-chevron-circle-down" aria-hidden="true"></i>
+                    </button>
+                    <div class="w3-dropdown-content w3-border dropdown-connect">
+                     <a href={{ url("Accueil/asAdmin") }} class="item">Administrateur</a>
+                     <a href={{ url("Accueil/asUser") }} class="item">Utilisateur</a>
+                    </div>
+                  </div>
+                </div>
 				{% endif %}
 			</div>
 		</div>

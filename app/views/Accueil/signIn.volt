@@ -1,5 +1,15 @@
 <div id="suite"></div>
-{% include 'partials/errors.volt' %}
-<div class="ui message">
-{{ q['frmLogin'] }}
+
+<div class="block-sign">
+    
+    <div class="ui message">
+    <div class="ui black message">
+      <div class="header">
+        Connexion 
+      </div>
+      <p>Veuillez vous connecter pour accéder à votre compte.</p>
+      {% include 'partials/errors.volt' %}
+    </div>
+    {{ q['frmLogin'] }}
+    </div>
 </div>

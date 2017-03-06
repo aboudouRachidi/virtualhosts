@@ -26,12 +26,12 @@ class AccueilController extends ControllerBase
 		$form = $semantic->htmlForm("formInsc");
 		$form->setValidationParams(["on"=>"blur","inline"=>true]);
 		$fields=$form->addFields();
-		$fields->addInput("name","Nom(*)","text","","Entrez votre nom")->addRule("empty");
-		$fields->addInput("firstname","Prenom(*)","text","","Entrez votre prenom")->addRule("empty");
-		$form->addInput("email","Email(*)","email","","Entrez votre Email")->addRules(["empty","email"]);
-		$form->addInput("password","Mot de passe(*)","password","","Veuillez entrer un mot de passe")->addRules(["empty","minLength[8]"]);
-		$form->addInput("checkpassword","Confirmation mot de passe(*)","password","","Veuillez confirmer votre mot de passe")->addRules(["empty","minLength[8]","match[password]"]);
-		$form->addInput("login","Login(*)","text","","Entrez votre identifiant" )->addRule("empty");
+		$fields->addInput("name","Nom","text","","Entrez votre nom")->addRule("empty");
+		$fields->addInput("firstname","Prenom","text","","Entrez votre prenom")->addRule("empty");
+		$form->addInput("email","Email","email","","Entrez votre Email")->addRules(["empty","email"]);
+		$form->addInput("password","Mot de passe","password","","Veuillez entrer un mot de passe")->addRules(["empty","minLength[8]"]);
+		$form->addInput("checkpassword","Confirmation mot de passe","password","","Veuillez confirmer votre mot de passe")->addRules(["empty","minLength[8]","match[password]"]);
+		$form->addInput("login","Login","text","","Entrez votre identifiant" )->addRule("empty");
 		$form->addButton("btSub1","S'inscrire")->asSubmit();
 		$form->submitOnClick("btSub1", $this->controller."/register", "#content-container");
 		
@@ -57,7 +57,6 @@ class AccueilController extends ControllerBase
 		$form->setProperty("method", "post");
 		$form->setProperty("action", "login");
 		$form->addErrorMessage();
-		$form->addHeader("Connexion Utilisateur :",3);
 		$form->addInput("email","Adresse email","email",$this->request->getPost("email"))->addRule("empty","Veuillez remplir le champ adresse...");
 		$form->addInput("password","Mot de passe","password")->addRule("empty","Veuillez remplir le champ mot de passe ...");
 		$icon=$semantic->htmlIcon("","checkmark");
@@ -87,14 +86,21 @@ class AccueilController extends ControllerBase
 
 				}
 				else{
-					//$this->view->setVars(["errors"=>"true"]);
-					$msg=$semantic->htmlMessage("mess5","Erreur d'authetification !");
-					$msg->setVariation("floating");
-					//$msg = "Erreur d'authetification !";
+
+					$msg=$semantic->htmlMessage("msg","Email ou mot de passe incorrect !");
+					$msg->addHeader("Erreur !");
+					$msg->setIcon("warning circle");
+					$msg->addClass("error");
+					$msg->setDismissable();
+
 					$this->dispatcher->forward(["controller"=>$this->controller,"action" => "signIn","params" => [$msg]]);
 				}
 			}else{
-				$msg ="Utilisateur non reconnu !";
+				$msg=$semantic->htmlMessage("msg","Utilisateur non reconnu !");
+				$msg->addHeader("Erreur !");
+				$msg->setIcon("warning circle");
+				$msg->addClass("error");
+				$msg->setDismissable();
 				$this->dispatcher->forward(["controller"=>$this->controller,"action" => "signIn","params" => [$msg]]);
 			}
 		}else{
