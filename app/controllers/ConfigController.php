@@ -24,8 +24,14 @@ class ConfigController extends ControllerBase
 		
 		$semantic=$this->semantic;
 		
-		$dd=$semantic->htmlDropdown("dd","Machine")->asSelect("machine");
-		$dd->addItem(["test"]);
+		//$dd=$semantic->htmlDropdown("dd","Machine",["test1","test2"])->asSelect("machine");
+		
+		//$dd=$semantic->htmlDropdown("dd","Machine")->asSelect("machine");
+		//$dd->addItem("test")
+		;
+		$form=$semantic->htmlForm("frm9");
+		$form->addField(new HtmlFormDropdown("genre",array("Male","Female"),"Genre"));
+		echo $form;
 		
 		
 		$btnValider = $semantic->htmlButton("btnValider","Valider","ui green button")->getOnClick("Config/liste","#liste");

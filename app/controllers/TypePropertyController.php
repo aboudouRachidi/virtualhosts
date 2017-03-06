@@ -70,9 +70,9 @@ class TypePropertyController extends ControllerBase
     	$form->setValidationParams(["on"=>"blur","inline"=>true]);
     	$form->addErrorMessage();
     	
-    	$fields=$form->addFields();
-      	$fields->addDropdown("stype",$itemsStypes,"Type Serveurs *","Selectionner un type de serveur...",false)->setWidth(8).
-    	$fields->addDropdown("property",$itemsProperties,"Propriétés *","Selectionner une propriété...",false)->setWidth(8);
+    	//$fields=$form->addFields();
+      	//$fields->addDropdown("stype",$itemsStypes,"Type Serveurs *","Selectionner un type de serveur...",false)->setWidth(8).
+    	//$fields->addDropdown("property",$itemsProperties,"Propriétés *","Selectionner une propriété...",false)->setWidth(8);
     	
     	$nom = $form->addInput("name","Nom * :","text",false,"Nom de la propriété")->addRule("empty");;
     	$nom->getField()->labeledToCorner("asterisk","right");
