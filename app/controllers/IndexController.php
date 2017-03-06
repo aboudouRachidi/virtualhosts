@@ -18,6 +18,8 @@ class IndexController extends ControllerBase{
 		$btEx=$semantic->htmlButton("btEx","Test des échanges client/serveur")->getOnClick("ServerExchange/index","#file");
 		$btEx->addLabel("New");
 		
+		$lbl = $semantic->htmlLabel("lbl","Test echange...")->getOnClick("ServerExchange/index","#file");
+		$lbl->addProperties("w3-button w3-block w3-dark-grey");
 		$user = $this->session->get("auth");
 		$this->view->setVar("user", $user);
 		

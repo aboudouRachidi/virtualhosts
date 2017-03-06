@@ -62,15 +62,21 @@
     
       <div class="w3-row-padding">
         <div class="w3-col m12">
-          <div class="w3-container w3-card-2 w3-white w3-round"><br>
-            <i class="fa fa-hdd-o fa-4x" aria-hidden="true">Machine<br></i>
-            <span class="w3-right w3-opacity"><button>redemarrer</button></span>
+            <div class="w3-card-4">
             
-            <hr class="w3-clear">
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-            <button type="button" class="w3-button w3-theme-d1 w3-margin-bottom"><i class="fa fa-cogs"></i>  Configurer</button> 
-            <button type="button" class="w3-button w3-theme-d2 w3-margin-bottom"><i class="fa fa-trash"></i>  Supprimer</button> 
-          </div> 
+            <header class="w3-container w3-light-grey">
+              <h3>Test des échanges client/serveur</h3>
+            </header>
+            
+            <div class="w3-container">
+              <p>....</p>
+              <hr>
+              <p>...</p>
+            </div>
+            
+            <button class="w3-button w3-block w3-dark-grey">{{ q["lbl"] }}</button>
+            
+            </div> 
         </div>
       </div>
       
