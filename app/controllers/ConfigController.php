@@ -27,27 +27,26 @@ class ConfigController extends ControllerBase
 		
 		$semantic=$this->semantic;
 		
+		$mess=$semantic->htmlMessage("mess1","Cette interface permet aux utilisateurs de redémarer les VirtualHosts et les serveur de la machine selectionné.");
+		$mess->setVariation("floating");
 
 		$host = Host::find("idUser=".$user->getId());
 		$itemsHost = JArray::modelArray($host,"getId","getName");
 		$form=$semantic->htmlForm("frm");
 		$form->addField(new HtmlFormDropdown("machine",$itemsHost,"Machine","Selectionnez un machine"));
-		$form->addButton("btnValider","Valider","ui green button")->getOnClick("Config/liste","#liste")->addIcon("checkmark icon");
-		
-		
-		$btnValider = $semantic->htmlButton("btnValider","Valider","ui green button")->getOnClick("Config/liste","#liste");
-		$btnValider->addIcon("checkmark icon");
-		$host=$this->request->getPost("#host");
-		
+		$form->addButton("btnValider","Valider","ui green button")->setTagName("a")->addIcon("checkmark icon");
+		$form->submitOnClick("btnValider","Config/liste","#liste");
 		$this->jquery->compile($this->view);
 
 	}
 	public function listeAction(){
 		if ($this->request->isPost()) {
 			// récupére les donnée dans le formulaire
-			$host   = $this->request->getPost("host");
+			$machine   = $this->request->getPost("machine");
+			
 		}
-		
+		$machine=Host::findFirst("id= ".$machine);
+		$this->view->setVars(["machine"=>$machine]);
 		
 		
 		
@@ -61,7 +60,7 @@ class ConfigController extends ControllerBase
 		$this->view->setVars(["hosts"=>$hosts]);
 		
 		$user = $this->session->auth;
-		$user = User::findFirst($user["id"]);
+		$user = User::findFirst($user->getId());
 		
 		$virtualhosts=Virtualhost::find();
 		$this->view->setVars(["virtualhosts"=>$virtualhosts,"user"=>$user,"host"=>$host]);

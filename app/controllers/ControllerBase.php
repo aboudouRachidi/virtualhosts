@@ -6,12 +6,16 @@ use Ajax\semantic\html\base\HtmlSemDoubleElement;
 use Phalcon\Mvc\View;
 use Phalcon\Mvc\Dispatcher;
 
+/**
+ * @author aubryy
+ * @property \Ajax\JsUtils
+ */
 class ControllerBase extends Controller{
 	protected $controller;
 	protected $action;
 
 	/**
-	 * @property \Ajax\Semantic;
+	 * @property Ajax\Semantic;
 	 */
 	protected $semantic;
 	public function initialize()

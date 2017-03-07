@@ -1,11 +1,5 @@
-<h1 class="ui dividing header">Mise à jour du fichier de configuration <i class="configure icon"></i></h1>
 </br>
-
-
-
-</br>
-
-<h4 class="ui dividing header">Liste des virtualhosts trouvés ...</h4>
+<h4 class="ui dividing header">Liste des virtualhosts pour la machine {{ machine.getName() }}</h4>
 
 
 {% if host != "rien" %}<!-- 4 -->
