@@ -1,6 +1,8 @@
 </br>
 <h4 class="ui dividing header">Liste des virtualhosts pour la machine {{ machine.getName() }}</h4>
 
+{{ q["table"] }}
+
 
 {% if host != "rien" %}<!-- 4 -->
 {% for server in servers %}<!-- 1 -->

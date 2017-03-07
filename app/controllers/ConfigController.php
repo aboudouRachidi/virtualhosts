@@ -27,7 +27,7 @@ class ConfigController extends ControllerBase
 		
 		$semantic=$this->semantic;
 		
-		$mess=$semantic->htmlMessage("mess1","Cette interface permet aux utilisateurs de redémarer les VirtualHosts et les serveur de la machine selectionné.");
+		$mess=$semantic->htmlMessage("mess1","Cette interface permet aux utilisateurs de redémarer les VirtualHosts de la machine selectionné.");
 		$mess->setVariation("floating");
 
 		$host = Host::find("idUser=".$user->getId());
@@ -47,6 +47,25 @@ class ConfigController extends ControllerBase
 		}
 		$machine=Host::findFirst("id= ".$machine);
 		$this->view->setVars(["machine"=>$machine]);
+		
+		$user = $this->session->auth;
+		$user = User::findFirst($user->getId());
+				
+		$vhs = Virtualhost::find("idUser=".$user->getId());
+		
+		$semantic=$this->semantic;
+		
+		$table=$semantic->dataTable("table","VirtualHost",$vhs);
+		$table->setFields(["name","idServer"]);
+		$table->setCaptions(["Nom","Serveur","Actions"]);
+		$table->addFieldButton("Redemarer");
+		echo $lv;
+		
+		
+		
+		
+		
+		
 		
 		
 		
