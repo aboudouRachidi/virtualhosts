@@ -1,20 +1,23 @@
 <?php
 
 use Ajax\Semantic;
+use Ajax\semantic\html\collections\form\HtmlFormDropdown;
+use Ajax\service\JArray;
 
 class ConfigController extends ControllerBase
 {
 
 	public function indexAction()
 	{
+		
 		$this->secondaryMenu($this->controller,$this->action);
 		$this->tools($this->controller,$this->action);
 		
 		$servers=Server::find();
 		$this->view->setVars(["servers"=>$servers]);
 		
-		$hosts=Host::find();
-		$this->view->setVars(["hosts"=>$hosts]);
+		//$hosts=Host::find();
+		//$this->view->setVars(["hosts"=>$hosts]);
 		
 		$user = $this->session->auth;
 		$user = User::findFirst($user->getId());
@@ -24,19 +27,18 @@ class ConfigController extends ControllerBase
 		
 		$semantic=$this->semantic;
 		
-		//$dd=$semantic->htmlDropdown("dd","Machine",["test1","test2"])->asSelect("machine");
-		
-		//$dd=$semantic->htmlDropdown("dd","Machine")->asSelect("machine");
-		//$dd->addItem("test")
-		;
-		$form=$semantic->htmlForm("frm9");
-		$form->addField(new HtmlFormDropdown("genre",array("Male","Female"),"Genre"));
-		echo $form;
+
+		$host = Host::find("idUser=".$user->getId());
+		$itemsHost = JArray::modelArray($host,"getId","getName");
+		$form=$semantic->htmlForm("frm");
+		$form->addField(new HtmlFormDropdown("machine",$itemsHost,"Machine","Selectionnez un machine"));
+		$form->addButton("btnValider","Valider","ui green button")->getOnClick("Config/liste","#liste")->addIcon("checkmark icon");
 		
 		
 		$btnValider = $semantic->htmlButton("btnValider","Valider","ui green button")->getOnClick("Config/liste","#liste");
 		$btnValider->addIcon("checkmark icon");
 		$host=$this->request->getPost("#host");
+		
 		$this->jquery->compile($this->view);
 
 	}
