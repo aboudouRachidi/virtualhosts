@@ -2,6 +2,6 @@
 {{ q["mess1"] }}
 {{ q["frm"] }}
 <div id="liste"></div>
-
+{{ script_foot }}
 
 

@@ -53,13 +53,20 @@ class ConfigController extends ControllerBase
 				
 		$vhs = Virtualhost::find("idUser=".$user->getId());
 		
+	    
+		
 		$semantic=$this->semantic;
 		
+		$redemarer=$semantic->htmlButton("Redemarer","Redemarer");
+		$redemarer->addIcon("power",false,true);
+		
 		$table=$semantic->dataTable("table","VirtualHost",$vhs);
-		$table->setFields(["name","idServer"]);
+		$table->setFields(["name","serveur"]);
 		$table->setCaptions(["Nom","Serveur","Actions"]);
 		$table->addFieldButton("Redemarer");
-		echo $lv;
+		
+
+		
 		
 		
 		
