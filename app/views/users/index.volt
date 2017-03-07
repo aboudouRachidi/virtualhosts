@@ -1,10 +1,11 @@
-{{ q["messageInfo"] }}
+<div id="refresh">
 <div class="ui message">
 <div class="ui black message">
   <div class="header">
-    Inscription 
+    Mises à jour informations personnelles 
   </div>
-  <p>Veuillez vous inscrire. Tous les champs marqués par des <em>*</em> sont obligatoire !</p>
+  <p>Veuillez modifier vos informations. Tous les champs marqués par des <em>*</em> sont obligatoire !</p>
 </div>
 {{ q["formInsc"] }}
+</div>
 </div>

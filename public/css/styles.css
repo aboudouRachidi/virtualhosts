@@ -74,6 +74,12 @@ div#content-container {
 	margin-right: auto;
 	width: 50em;
 }
+
+.w3-white .button {
+    border: none !important;
+    border-radius: 0px;
+}
+
 footer {
 	/* background-color: #222; */
 	background-color: #4d636f !important;

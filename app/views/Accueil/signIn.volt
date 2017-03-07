@@ -8,7 +8,6 @@
         Connexion 
       </div>
       <p>Veuillez vous connecter pour accéder à votre compte.</p>
-      {% include 'partials/errors.volt' %}
     </div>
     {{ q['frmLogin'] }}
     </div>

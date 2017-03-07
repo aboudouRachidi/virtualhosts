@@ -20,7 +20,7 @@
 		<div class="ui container">
 			<div class="ui menu secondary">
 				<div class="header item">
-					<i class="snapchat ghost big link icon"></i>
+					<i class="snapchat ghost big icon"></i>
 					Virtualhosts
 				</div>
 				{% if this.session.has("auth") %}
@@ -58,6 +58,7 @@
 		<div id="tools-container">
 			{{ q["tools"] }}
 		</div>
+		{% include 'partials/flash.volt' %}
 		<div id="content-container" class="ui segment">{{ content() }}</div>
 	</div>
 	<footer>

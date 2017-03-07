@@ -11,7 +11,7 @@
 {{ q["btAfficher"] }} {{ q["btApache"] }} {{ q["btNginx"] }} {{ q["btTmp"] }} {{ q["btEx"] }}
 {{ q["message1"] }}
 
-<div class="w3-container w3-content" style="max-width:1400px;margin-top:80px">    
+<div class="w3-container w3-content" style="max-width:1400px;margin-top:80px">
   <!-- The Grid -->
   <div class="w3-row">
     <!-- Left Column -->
@@ -28,7 +28,17 @@
       </div>
       <br>
       
-      <!-- Interests --> 
+            <!-- Accordion -->
+      <div class="w3-card-2 w3-round">
+        <div class="w3-white">
+           {{ q["btEditProfile"] }}
+           
+           {{ q["btEditPassword"] }}
+        </div>      
+      </div>
+      <br>
+      
+      <!-- VIRTUALHOSTS --> 
       <div class="w3-card-2 w3-round w3-white w3-hide-small">
         <div class="w3-container">
           <p>Virtualhosts</p>
@@ -61,22 +71,24 @@
     <div class="w3-col m7">
     
       <div class="w3-row-padding">
-        <div class="w3-col m12">
-            <div class="w3-card-4">
-            
-            <header class="w3-container w3-light-grey">
-              <h3>Test des échanges client/serveur</h3>
-            </header>
-            
-            <div class="w3-container">
-              <p>....</p>
-              <hr>
-              <p>...</p>
+      <div id="refresh">
+            <div class="w3-col m12 middle-column">
+                <div class="w3-card-4">
+                
+                <header class="w3-container w3-light-grey">
+                  <h3>Test des échanges client/serveur</h3>
+                </header>
+                
+                <div class="w3-container">
+                  <p>....</p>
+                  <hr>
+                  <p>...</p>
+                </div>
+                
+                <button class="w3-button w3-block w3-dark-grey">{{ q["lbl"] }}</button>
+                
+                </div> 
             </div>
-            
-            <button class="w3-button w3-block w3-dark-grey">{{ q["lbl"] }}</button>
-            
-            </div> 
         </div>
       </div>
       

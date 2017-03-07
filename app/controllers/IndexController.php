@@ -4,7 +4,7 @@ use Phalcon\Mvc\View;
 use Ajax\semantic\html\elements\HtmlButton;
 class IndexController extends ControllerBase{
 
-    public function indexAction(){
+    public function indexAction($msg=NULL){
     	$this->secondaryMenu($this->controller,$this->action);
     	$this->tools($this->controller,$this->action);
 
@@ -18,10 +18,18 @@ class IndexController extends ControllerBase{
 		$btEx=$semantic->htmlButton("btEx","Test des échanges client/serveur")->getOnClick("ServerExchange/index","#file");
 		$btEx->addLabel("New");
 		
+		$btEditProfile = $semantic->htmlButton("btEditProfile","Modifier mes informations","green w3-block w3-theme-l1 w3-left-align");
+		$btEditProfile->addIcon("settings fa-fw w3-margin-right",true,true);
+		$btEditProfile->getOnClick("Users/index",".middle-column");
+		
+		$btEditPassword = $semantic->htmlButton("btEditPassword","Modifier mon mot de passe","orange w3-block w3-theme-l1 w3-left-align");
+		$btEditPassword->addIcon("setting fa-fw w3-margin-right",true,true);
+		$btEditPassword->getOnClick("Users/updatePassword",".middle-column");
+		
 		$lbl = $semantic->htmlLabel("lbl","Test echange...")->getOnClick("ServerExchange/index","#file");
 		$lbl->addProperties("w3-button w3-block w3-dark-grey");
 		$user = $this->session->get("auth");
-		$this->view->setVar("user", $user);
+		$this->view->setVars(["user"=>$user,"msg"=>$msg]);
 		
 		$this->jquery->compile($this->view);
     }
