@@ -57,45 +57,40 @@ class ConfigController extends ControllerBase
 		
 		$semantic=$this->semantic;
 		
-		$redemarer=$semantic->htmlButton("Redemarer","Redemarer");
-		$redemarer->addIcon("power",false,true);
-		
 		$table=$semantic->dataTable("table","VirtualHost",$vhs);
-		$table->setFields(["name","serveur"]);
+		$table->setFields(["name", "idServer"]);
 		$table->setCaptions(["Nom","Serveur","Actions"]);
-		$table->addFieldButton("Redemarer");
+		$table->addFieldButton("Redemarer",false,function(&$bt,$instance){
+			$bt->addIcon("power",true,true);
+			$bt->addToProperty("class","restart");
+		});
+		$table->setIdentifierFunction("getId");
+		$this->jquery->getOnClick("#table .restart", "config/reboot","#liste",["attr"=>"data-ajax"]);
+		$table->asForm();
+		$table->submitOnClick("Redemarer","Config/rebot","#reboot");
 		
 
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		$this->secondaryMenu($this->controller,$this->action);
-		$this->tools($this->controller,$this->action);
-		
-		$servers=Server::find();
-		$this->view->setVars(["servers"=>$servers]);
-		
-		$hosts=Host::find();
-		$this->view->setVars(["hosts"=>$hosts]);
-		
-		$user = $this->session->auth;
-		$user = User::findFirst($user->getId());
-		
-		$virtualhosts=Virtualhost::find();
-		$this->view->setVars(["virtualhosts"=>$virtualhosts,"user"=>$user,"host"=>$host]);
-		
 		$this->jquery->compile($this->view);
 		
 		
 	}
-	public function rebootAction(){
+	
+	public function rebootAction($id){
+		$this->view->disable();
+		echo $id;
+		
+		$vh= Virtualhost::findFirst("id=".$id);
+		$address="127.0.0.1";
+		$port="80";
+		$action="restart";
+		Network::$semantic=$this->semantic;
+		$responses=Network::send("127.0.0.1", "9001", "run", "c:\windows\system32\calc.exe");
+		echo Network::displayMessages($responses);
+		
+		echo $this->jquery->compile();
+		
+	}
+	/*public function rebootAction(){
 		
 		if ($this->request->isPost()) {
 			// récupére les donnée dans le formulaire
@@ -170,7 +165,7 @@ class ConfigController extends ControllerBase
 	
 	
 	
-	}
+	}*/
 	
 	
 }
