@@ -84,7 +84,7 @@ class ConfigController extends ControllerBase
 		$port="80";
 		$action="restart";
 		Network::$semantic=$this->semantic;
-		$responses=Network::send("127.0.0.1", "9001", "run", "c:\windows\system32\calc.exe");
+		$responses=Network::send("172.16.104.25", "9001", "run", "restart Apache2");
 		echo Network::displayMessages($responses);
 		
 		echo $this->jquery->compile();
