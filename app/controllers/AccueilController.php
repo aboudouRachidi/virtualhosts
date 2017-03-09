@@ -80,9 +80,11 @@ class AccueilController extends ControllerBase
 			if($user != null){
 				if (@$_POST['password'] == $user->getPassword()){
 					$this->session->set("auth", $user);
-					$this->flash->success("Bienvenue ".$user->getLogin());
+					$msg = $semantic->htmlMessage("msg","Bienvenue ".$user->getLogin());
+					$msg->addClass("success");
+					$msg->setDismissable();
 					
-					$this->dispatcher->forward(array("controller"=>"Index","action"=>"index"));
+					$this->dispatcher->forward(array("controller"=>"Index","action"=>"index","params" => [$msg]));
 
 				}
 				else{
@@ -112,15 +114,27 @@ class AccueilController extends ControllerBase
 	}
 	
 	public function asUserAction(){
+		$semantic=$this->semantic;
+		$semantic->setLanguage("fr");
 		$user = User::findFirst("idrole = 2");
 		$this->session->set("auth", $user);
-		$this->dispatcher->forward(array("controller"=>"Index", "action"=>"index"));
+		$msg=$semantic->htmlMessage("msg","Bienvenue ".$user->getLogin());
+		$msg->addClass("success");
+		$msg->setDismissable();
+		
+		$this->dispatcher->forward(array("controller"=>"Index", "action"=>"index","params" => [$msg]));
 	}
 	
 	public function asAdminAction(){
+		$semantic=$this->semantic;
+		$semantic->setLanguage("fr");
 		$user = User::findFirst("idrole = 1");
 		$this->session->set("auth", $user);
-		$this->dispatcher->forward(array("controller"=>"Index", "action"=>"index"));
+		$msg=$semantic->htmlMessage("msg","Bienvenue ".$user->getLogin());
+		$msg->addClass("success");
+		$msg->setDismissable();
+		
+		$this->dispatcher->forward(array("controller"=>"Index", "action"=>"index","params" => [$msg]));
 	}
 	
 	public function logoutAction(){

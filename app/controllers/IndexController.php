@@ -28,10 +28,59 @@ class IndexController extends ControllerBase{
 		
 		$lbl = $semantic->htmlLabel("lbl","Test echange...")->getOnClick("ServerExchange/index","#file");
 		$lbl->addProperties("w3-button w3-block w3-dark-grey");
+		
+		/**
+		 * L'utilisateur actuellement authentifié
+		 * @var $user 
+		 */
 		$user = $this->session->get("auth");
-		$this->view->setVars(["user"=>$user,"msg"=>$msg]);
+		
+		/********************
+		 * Tableau de tous les utilisateurs
+		 * @var array $users
+		 */
+		$users=User::find();
+		$lv=$semantic->dataTable("table-users","user",$users);
+		$lv->setFields(["name","firstname","login","email"]);
+		$lv->setCaptions(["Nom","Prenom","login","email","Actions"]);
+		$lv->addEditDeleteButtons(true,["ajaxTransition"=>"random"]);
+		$lv->setUrls(["masters/vAddUser","masters/vUpdateUser","masters/vDeleteUser"]);
+		$lv->setTargetSelector("#table-users-update");
+		
+		/********************
+		 * Tableau de tous les roles
+		 * @var array $users
+		 */
+		$roles=Role::find();
+		$lv=$semantic->dataTable("table-roles","user",$roles);
+		$lv->setFields(["name"]);
+		$lv->setCaptions(["Libelle","Actions"]);
+		$lv->addEditDeleteButtons(true,["ajaxTransition"=>"random"]);
+		$lv->setUrls(["master/addRole","masters/updateRole","masters/deleteRole"]);
+		$lv->setTargetSelector("#table-roles-update");
+		/**
+		 * Retourner le nombre total 
+		 */
+		$nbUsers = AppHelper::getNbUsers();
+		$nbHosts = AppHelper::getNbHosts();
+		$nbVhosts = AppHelper::getNbVhosts();
+		$nbServers = AppHelper::getNbServers();
+		
+		$this->view->setVars([
+				"user"=>$user,
+				"nbUsers"=>$nbUsers,
+				"nbServers"=>$nbServers,
+				"nbVhosts"=>$nbVhosts,
+				"nbHosts"=>$nbHosts,
+					"msg"=>$msg
+						
+				]);
 		
 		$this->jquery->compile($this->view);
+    }
+    
+    public function masterAction(){
+    	
     }
 
     public function hostsAction(){
