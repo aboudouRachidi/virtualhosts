@@ -21,4 +21,11 @@ class AuthHelper{
 		
 		return $_SESSION['auth'];
 	}
+	
+	public static function isAdmin(){
+	
+		if(AuthHelper::getUser()->getIdrole() == 1) return true;
+		
+		return false;
+	}
 }
