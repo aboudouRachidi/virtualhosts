@@ -27,7 +27,7 @@ class ConfigController extends ControllerBase
 		
 		$semantic=$this->semantic;
 		
-		$mess=$semantic->htmlMessage("mess1","Cette interface permet aux utilisateurs de redémarer les VirtualHosts de la machine selectionné.");
+		$mess=$semantic->htmlMessage("mess1",ConfigFileGenerator::configTemplate(2));
 		$mess->setVariation("floating");
 
 		$host = Host::find("idUser=".$user->getId());
@@ -57,15 +57,14 @@ class ConfigController extends ControllerBase
 		
 		$semantic=$this->semantic;
 		
-		$redemarer=$semantic->htmlButton("Redemarer","Redemarer");
-		$redemarer->addIcon("power",false,true);
-		
 		$table=$semantic->dataTable("table","VirtualHost",$vhs);
-		$table->setFields(["name","serveur"]);
+		$table->setFields(["name", "idServer"]);
 		$table->setCaptions(["Nom","Serveur","Actions"]);
-		$table->addFieldButton("Redemarer");
+		//$table->addFieldButton("Redemarer",false,function(&$bt,$instance){$bt->addIcon("power",true,true);});
+		$table->asForm();
+		$table->fieldAsSubmit(3,"basic","sTest/dePost","#lv4-2-submit",["ajax"=>["ajaxTransition"=>"random"]]);
 		
-
+		$table->compile($this->jquery);
 		
 		
 		
