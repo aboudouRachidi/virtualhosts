@@ -78,7 +78,7 @@ class AccueilController extends ControllerBase
 		if($this->request->isPost()){
 			$user = User::findFirst("email = '".@$_POST['email']."'");
 			if($user != null){
-				if (@$_POST['password'] == $user->getPassword()){
+				if (password_verify(@$_POST['password'],$user->getPassword())){
 					$this->session->set("auth", $user);
 					$msg = $semantic->htmlMessage("msg","Bienvenue ".$user->getLogin());
 					$msg->addClass("success");

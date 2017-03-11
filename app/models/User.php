@@ -93,7 +93,7 @@ class User extends \Phalcon\Mvc\Model
      */
     public function setPassword($password)
     {
-        $this->password = $password;
+    	$this->password = password_hash($password, PASSWORD_DEFAULT, ['cost' => 13]);
 
         return $this;
     }

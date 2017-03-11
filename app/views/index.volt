@@ -54,12 +54,14 @@
 			{{ q["secondary"] }}
 		</div>
 	</div>
+	<div id="refresh">
 	<div id="main-container" class="ui container">
 		<div id="tools-container">
 			{{ q["tools"] }}
 		</div>
 		{% include 'partials/flash.volt' %}
 		<div id="content-container" class="ui segment">{{ content() }}</div>
+	</div>
 	</div>
 	<footer>
 		<div class="ui container">Mentions légales :

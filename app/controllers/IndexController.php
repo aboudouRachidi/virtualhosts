@@ -2,6 +2,7 @@
 
 use Phalcon\Mvc\View;
 use Ajax\semantic\html\elements\HtmlButton;
+
 class IndexController extends ControllerBase{
 
     public function indexAction($msg=NULL){
@@ -39,25 +40,50 @@ class IndexController extends ControllerBase{
 		 * Tableau de tous les utilisateurs
 		 * @var array $users
 		 */
-		$users=User::find();
-		$lv=$semantic->dataTable("table-users","user",$users);
-		$lv->setFields(["name","firstname","login","email"]);
-		$lv->setCaptions(["Nom","Prenom","login","email","Actions"]);
-		$lv->addEditDeleteButtons(true,["ajaxTransition"=>"random"]);
-		$lv->setUrls(["masters/vAddUser","masters/vUpdateUser","masters/vDeleteUser"]);
-		$lv->setTargetSelector("#table-users-update");
+		$btnAddUser = $semantic->htmlButton("btnAddUser","Ajouter utilisateur","ui basic button");
+		$btnAddUser->addIcon("icon add user",true,false);
+		$btnAddUser->getOnClick("masters/vAddUser","#table-users-update");
+		
+		$users=User::find(["limit"=>15,"offest"=>0]);
+		$DTUsers=$semantic->dataTable("table-users","user",$users);
+		$DTUsers->setFields(["name","firstname","login","email"]);
+		$DTUsers->setCaptions(["Nom","Prenom","login","email","Actions"]);
+		$DTUsers->addEditDeleteButtons(true,["ajaxTransition"=>"random"]);
+		$DTUsers->setUrls(["masters/search","masters/vUpdateUser","masters/vDeleteUser"]);
+		
+		$search=$semantic->htmlSearch("search7","Search countries...","search");
+		$search->setUrl($this->url->get("masters/userSearch/{query}"))->setType("category")->setFluid();
+		$search->postOnSelect("masters/userInfo","#table-users-update");
+		
+		$DTUsers->addItemsInToolbar([$btnAddUser,$search]);
+
+		$DTUsers->setToolbarPosition(Ajax\semantic\widgets\datatable\PositionInTable::FOOTER);
+		$DTUsers->getToolbar()->setSecondary();
+
+		$DTUsers->setTargetSelector("#table-users-update");
 		
 		/********************
 		 * Tableau de tous les roles
-		 * @var array $users
+		 * @var array $roles
 		 */
+		
+		$btnAddRole = $semantic->htmlButton("btnAddRole","Ajouter role","ui basic button");
+		$btnAddRole->addIcon("icon plus",true,false);
+		$btnAddRole->getOnClick("masters/vAddRole","#table-roles-update");
+		
 		$roles=Role::find();
-		$lv=$semantic->dataTable("table-roles","user",$roles);
-		$lv->setFields(["name"]);
-		$lv->setCaptions(["Libelle","Actions"]);
-		$lv->addEditDeleteButtons(true,["ajaxTransition"=>"random"]);
-		$lv->setUrls(["master/addRole","masters/updateRole","masters/deleteRole"]);
-		$lv->setTargetSelector("#table-roles-update");
+		$DTRoles=$semantic->dataTable("table-roles","role",$roles);
+		$DTRoles->setFields(["name"]);
+		$DTRoles->setCaptions(["Libelle","Actions"]);
+		$DTRoles->addEditDeleteButtons(true,["ajaxTransition"=>"random"]);
+		$DTRoles->setUrls(["master/search","masters/updateRole","masters/deleteRole"]);
+		$DTRoles->setTargetSelector("#table-roles-update");
+		
+		$DTRoles->addItemsInToolbar([$btnAddRole]);
+		
+		$DTRoles->setToolbarPosition(Ajax\semantic\widgets\datatable\PositionInTable::FOOTER);
+		$DTRoles->getToolbar()->setSecondary();
+		
 		/**
 		 * Retourner le nombre total 
 		 */
@@ -65,6 +91,7 @@ class IndexController extends ControllerBase{
 		$nbHosts = AppHelper::getNbHosts();
 		$nbVhosts = AppHelper::getNbVhosts();
 		$nbServers = AppHelper::getNbServers();
+		
 		
 		$this->view->setVars([
 				"user"=>$user,

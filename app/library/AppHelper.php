@@ -16,4 +16,14 @@ class AppHelper {
 	public static function getNbServers(){
 		return count(Server::find());
 	}
+	
+	public static function getAllRoles(){
+		$roles = Role::find();
+		$itemsRoles = array();
+		foreach($roles as $role) {
+			$itemsRoles[] = $role->getName();
+		}
+		
+		return $itemsRoles;
+	}
 }
