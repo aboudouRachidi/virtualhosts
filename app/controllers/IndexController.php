@@ -76,7 +76,7 @@ class IndexController extends ControllerBase{
 		$DTRoles->setFields(["name"]);
 		$DTRoles->setCaptions(["Libelle","Actions"]);
 		$DTRoles->addEditDeleteButtons(true,["ajaxTransition"=>"random"]);
-		$DTRoles->setUrls(["master/search","masters/updateRole","masters/deleteRole"]);
+		$DTRoles->setUrls(["master/search","masters/vUpdateRole","masters/vDeleteRole"]);
 		$DTRoles->setTargetSelector("#table-roles-update");
 		
 		$DTRoles->addItemsInToolbar([$btnAddRole]);

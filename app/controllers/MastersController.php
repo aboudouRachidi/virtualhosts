@@ -187,6 +187,60 @@ class MastersController extends ControllerBase
     	$this->jquery->compile($this->view);
     }
     
+    public function vDeleteUserAction($id){
+    	$this->secondaryMenu($this->controller,$this->action);
+    	$this->tools($this->controller,$this->action);
+    
+    	$user = User::findFirst($id);
+    
+    	$semantic=$this->semantic;
+    	$semantic->setLanguage("fr");
+    
+    	$btnCancel = $semantic->htmlButton("btnCancel","Annuler","red");
+    	$btnCancel->getOnClick("index/index","#main-container");
+    
+    	$form=$semantic->htmlForm("frmDelete");
+    	$form->setValidationParams(["on"=>"blur","inline"=>true]);
+    	$form->addErrorMessage();
+    	$fromAction = $this->url->get("$this->controller/confirmDelete");
+    	$form->setProperty("action", "$fromAction");
+    	$form->setProperty("method", "post");
+    
+    	$form->addHeader("Voulez-vous vraiment supprimer l'utilisateur : ". $user->getName()." ? ",3);
+    	$form->addInput("id",NULL,"hidden",$user->getId());
+    	$nom = $form->addInput("name","Nom :","text",NULL,"Confirmer le nom de l'utilisateur")->addRule("empty");
+    	$nom->getField()->labeledToCorner("asterisk","right");
+    
+    	$form->addButton("submit", "Supprimer","ui negative button")->asSubmit();
+    	//$form->submitOnClick("submit",$this->controller."/confirmDelete","#table-users-update");
+    
+    	$form->addButton("btnCancel", "Annuler","ui positive button");
+    
+    
+    	$this->view->setVars(["user"=>$user]);
+    
+    	$this->jquery->compile($this->view);
+    }
+    
+    public function confirmDeleteAction(){
+    	$user = User::findFirst($_POST['id']);
+    
+    	if($user->getName() == $_POST['name']){
+    		$user->delete();
+    
+    		$this->flash->message("success","L'utilisateur '".$_POST['name']."' a été supprimé avec succès");
+    		$this->jquery->get($this->controller,"#table-users-update");
+    
+    	}else{
+    
+    		$this->flash->message("error","L'utilisateur '".$user->getName()."' n'a pas été supprimé : Le nom ne correspond pas ! ");
+    		$this->jquery->get($this->controller,"#table-users-update");
+    	}
+    
+    	echo $this->jquery->compile();
+    }
+    
+    
     public function vAddRoleAction(){
     	$this->secondaryMenu($this->controller,$this->action);
     	$this->tools($this->controller,$this->action);
@@ -203,56 +257,102 @@ class MastersController extends ControllerBase
     }
     
     
-    public function vDeleteUserAction($id){
+
+    
+    
+    public function vUpdateRoleAction($id){
     	$this->secondaryMenu($this->controller,$this->action);
     	$this->tools($this->controller,$this->action);
     	 
-    	$user = User::findFirst($id);
-  
+    	$role = Role::findFirst($id);
+    	
     	$semantic=$this->semantic;
     	$semantic->setLanguage("fr");
-    	 
+    	
+    	$form=$semantic->htmlForm("frmUpdate");
+    	$form->setValidationParams(["on"=>"blur","inline"=>true]);
+    	
+    	$fromAction = $this->url->get("$this->controller/updateRoleSubmit/".$role->getId());
+    	$form->setProperty("action", "$fromAction");
+    	$form->setProperty("method", "post");
+    	
+    	$name = $form->addInput("name","Nom","text",$role->getName())->addRule("empty");
+    	$name->getField()->labeledToCorner("asterisk","right");
+    	$form->addButton("submit","Modifier le rôle","button green")->asSubmit();
+    	//$form->addButton("btSub1","Modifier")->asSubmit();
+    	//$form->submitOnClick("btSub1", $this->controller."/updateUserPasswordSubmit", "#content-container");
+    	   
+    	
+    	$this->jquery->compile($this->view);
+    }
+    
+    public function updateRoleSubmitAction($id){
+    	$semantic=$this->semantic;
+    	$semantic->setLanguage("fr");
+    
+    	$role = Role::findFirst($id);
+    
+    	$role->save($_POST);
+    
+    	$msg=$semantic->htmlMessage("msg","Le role a été mis à jour avec succès !");
+    	$msg->addHeader("Bonne nouvelle !");
+    	$msg->setIcon("hand peace");
+    	$msg->addClass("success");
+    	$msg->setDismissable();
+    
+    	$this->dispatcher->forward(["controller"=>"Index","action" => "index","params" => [$msg]]);
+    }
+    
+    public function vDeleteRoleAction($id){
+    	$this->secondaryMenu($this->controller,$this->action);
+    	$this->tools($this->controller,$this->action);
+    
+    	$role = Role::findFirst($id);
+    
+    	$semantic=$this->semantic;
+    	$semantic->setLanguage("fr");
+    
     	$btnCancel = $semantic->htmlButton("btnCancel","Annuler","red");
     	$btnCancel->getOnClick("index/index","#main-container");
     
     	$form=$semantic->htmlForm("frmDelete");
     	$form->setValidationParams(["on"=>"blur","inline"=>true]);
     	$form->addErrorMessage();
-    	$fromAction = $this->url->get("$this->controller/confirmDelete");
+    	$fromAction = $this->url->get("$this->controller/confirmDeleteRole");
     	$form->setProperty("action", "$fromAction");
     	$form->setProperty("method", "post");
-    	 
-    	$form->addHeader("Voulez-vous vraiment supprimer l'utilisateur : ". $user->getName()." ? ",3);
-    	$form->addInput("id",NULL,"hidden",$user->getId());
-    	$nom = $form->addInput("name","Nom *:","text",NULL,"Confirmer le nom du type de serveur")->addRule("empty");
+    
+    	$form->addHeader("Voulez-vous vraiment supprimer le role : ". $role->getName()." ? ",3);
+    	$form->addInput("id",NULL,"hidden",$role->getId());
+    	$nom = $form->addInput("name","Nom :","text",NULL,"Confirmer le nom du role")->addRule("empty");
     	$nom->getField()->labeledToCorner("asterisk","right");
-    	 
+    
     	$form->addButton("submit", "Supprimer","ui negative button")->asSubmit();
     	//$form->submitOnClick("submit",$this->controller."/confirmDelete","#table-users-update");
-    	 
-    	$form->addButton("btnCancel", "Annuler","ui positive button");
-    	 
     
-    	$this->view->setVars(["user"=>$user]);
+    	$form->addButton("btnCancel", "Annuler","ui positive button");
+    
+    
+    	$this->view->setVars(["role"=>$role]);
     
     	$this->jquery->compile($this->view);
     }
     
-    public function confirmDeleteAction(){
-    	$user = User::findFirst($_POST['id']);
-    	 
-    	if($user->getName() == $_POST['name']){
-    		$user->delete();
+    public function confirmDeleteRoleAction(){
+    	$role = Role::findFirst($_POST['id']);
     
-    		$this->flash->message("success","L'utilisateur '".$_POST['name']."' a été supprimé avec succès");
-    		$this->jquery->get($this->controller,"#table-users-update");
+    	if($role->getName() == $_POST['name']){
+    		$role->delete();
+    
+    		$this->flash->message("success","Le role '".$_POST['name']."' a été supprimé avec succès");
+    		$this->jquery->get($this->controller,"#table-role-update");
     
     	}else{
     
-    		$this->flash->message("error","L'utilisateur '".$user->getName()."' n'a pas été supprimé : Le nom ne correspond pas ! ");
-    		$this->jquery->get($this->controller,"#table-users-update");
+    		$this->flash->message("error","Le roles '".$role->getName()."' n'a pas été supprimé : Le nom ne correspond pas ! ");
+    		$this->jquery->get($this->controller,"#table-role-update");
     	}
-    	 
+    
     	echo $this->jquery->compile();
     }
 }

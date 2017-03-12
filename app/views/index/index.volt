@@ -176,7 +176,7 @@
           <h3>{{ nbUsers }}</h3>
         </div>
         <div class="w3-clear"></div>
-        <h4>Users</h4>
+        <h4>Utilisateurs</h4>
       </div>
     </div>
   </div>
