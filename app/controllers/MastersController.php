@@ -32,8 +32,8 @@ class MastersController extends ControllerBase
     	$form->addInput("email","Email","email",$this->request->getPost("email"),"Entrez l'Email")->addRules(["empty","email"]);
     	$form->addInput("password","Mot de passe","password","","Veuillez entrer un mot de passe")->addRules(["empty","minLength[8]"]);
     	$form->addInput("checkpassword","Confirmation mot de passe","password","","Veuillez confirmer le mot de passe")->addRules(["empty","minLength[8]","match[password]"]);
-    	$form->addInput("login","Login","text","","Entrez votre identifiant" )->addRule("empty");
-    	$form->addDropdown("stype",AppHelper::getAllRoles(),"Roles ","Selectionner un role...",false);
+    	$form->addInput("login","Login","text","","Entrez un identifiant" )->addRule("empty");
+    	$form->addDropdown("roles",AppHelper::getAllRoles(),"Roles ","Selectionner un role...",false);
     	
     	$form->addButton("btSub1","Ajouter")->asSubmit();
     	//$form->submitOnClick("btSub1", $this->controller."/addUserSubmit", "#content-container");
@@ -47,22 +47,31 @@ class MastersController extends ControllerBase
     	$semantic->setLanguage("fr");
     	
     	$user=new User();
-    	$user->setIdrole(2);
+    	
+    	if($this->request->getPost("roles") != null && $this->request->getPost("roles") != "Selectionner un role..."){
+    		
+    		$user->setIdrole($this->request->getPost("roles")+1);
+    		
+    	}else {
+    		$user->setIdrole(2);
+    	}
+    	
     	$user->save($_POST);
     	
-    		$msg=$semantic->htmlMessage("msg","Un nouvel utilisateur ajouté !");
-    		$msg->addHeader("Bonne nouvelle !");
-    		$msg->setIcon("hand peace");
-    		$msg->addClass("success");
-    		$msg->setDismissable();
-    		
-    		$this->dispatcher->forward(["controller"=>"Index","action" => "index","params" => [$msg]]);
+    	$msg=$semantic->htmlMessage("msg","Un nouvel utilisateur ajouté !");
+    	$msg->addHeader("Bonne nouvelle !");
+    	$msg->setIcon("hand peace");
+    	$msg->addClass("success");
+    	$msg->setDismissable();
+    	
+    	$this->dispatcher->forward(["controller"=>"Index","action" => "index","params" => [$msg]]);
     	
     }
     
     public function vUpdateUserAction($id){
     	$this->secondaryMenu($this->controller,$this->action);
     	$this->tools($this->controller,$this->action);
+    	
     	$user = User::findFirst($id);
     	 
     	$semantic=$this->semantic;
@@ -81,6 +90,20 @@ class MastersController extends ControllerBase
     	$form->addButton("btSub1","Modifier")->asSubmit();
     	//$form->submitOnClick("btSub1","$this->controller/updateSubmitUser", "#content-container");
     	 
+    	/**
+    	 * form password
+    	**/
+    	
+    	$formPassword = $semantic->htmlForm("formPassword");
+    	$fromPasswordAction = $this->url->get("$this->controller/updateUserPasswordSubmit/".$user->getId());
+    	$formPassword->setProperty("action", "$fromPasswordAction");
+    	$formPassword->setProperty("method", "post");
+    	$formPassword->setValidationParams(["on"=>"blur","inline"=>true]);
+    	$formPassword->addInput("password","Mot de passe","password","","Veuillez entrer un mot de passe")->addRules(["empty","minLength[8]"]);
+    	$formPassword->addInput("checkpassword","Confirmation mot de passe","password","","Veuillez confirmer le mot de passe")->addRules(["empty","minLength[8]","match[password]"]);
+    	$formPassword->addButton("btSub1","Modifier")->asSubmit();
+    	//$formPassword->submitOnClick("btSub1", $this->controller."/updateUserPasswordSubmit", "#content-container");
+    	
     	$this->view->setVar("user", $user);
     	$this->jquery->compile($this->view);
     }
@@ -99,6 +122,23 @@ class MastersController extends ControllerBase
     	$msg->addClass("success");
     	$msg->setDismissable();
     	 
+    	$this->dispatcher->forward(["controller"=>"Index","action" => "index","params" => [$msg]]);
+    }
+    
+    public function updateUserPasswordSubmitAction($id){
+    	$semantic=$this->semantic;
+    	$semantic->setLanguage("fr");
+    
+    	$user = User::findFirst($id);
+    
+    	$user->save($_POST);
+    
+    	$msg=$semantic->htmlMessage("msg","Le mot de passe ont été mis à jour avec succès !");
+    	$msg->addHeader("Bonne nouvelle !");
+    	$msg->setIcon("hand peace");
+    	$msg->addClass("success");
+    	$msg->setDismissable();
+    
     	$this->dispatcher->forward(["controller"=>"Index","action" => "index","params" => [$msg]]);
     }
     
@@ -131,15 +171,18 @@ class MastersController extends ControllerBase
     	
     	$user = User::findFirst("login = '".$this->request->getPost('id')."'");
     	
-    	$btnDelUser = $semantic->htmlButton("btnDelUser","Supprimer","ui basic button");
+    	$btnDelUser = $semantic->htmlButton("btnDelUser","Supprimer","ui basic negative button");
     	$btnDelUser->addIcon("icon remove user",true,false);
     	$btnDelUser->getOnClick("masters/vDeleteUser/".$user->getId(),"#result");
+    	
+    	$btnUpdateUser = $semantic->htmlButton("btnUpdateUser","Modifier","ui basic positive button");
+    	$btnUpdateUser->addIcon("icon edit",true,false);
+    	$btnUpdateUser->getOnClick("masters/vUpdateUser/".$user->getId(),"#result");
     	
     	$semantic->htmlList("list",[
     			["fa-address-card-o",$user->getName()." ".$user->getFirstname() . " (".$user->getLogin().")"],
     			["mail",$user->getEmail()],
-    			["edit","Modifier"]
-    			
+    			["linkify",strtoupper($user->getRole()->getName())],
     	]);
     	$this->jquery->compile($this->view);
     }

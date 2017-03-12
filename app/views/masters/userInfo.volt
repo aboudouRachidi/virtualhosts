@@ -7,6 +7,7 @@
 <div id="erreur"></div>
 {{ q["list"] }}
 {{ q["btnDelUser"] }}
+{{ q["btnUpdateUser"] }}
 <div id="result"></div>
 </div>
 {{ script_foot }}

@@ -54,7 +54,7 @@ class UsersController extends ControllerBase
     	 
     	$semantic=$this->semantic;
     	$semantic->setLanguage("fr");
-    	$semantic->htmlMessage ( "messageInfo", "<b> Veuillez rentrer vos informations ");
+    	
     	$form = $semantic->htmlForm("formInsc");
     	$fromAction = $this->url->get("$this->controller/updatePasswordSubmit");
     	$form->setProperty("action", "$fromAction");
