@@ -6,7 +6,22 @@ use Phalcon\Forms\Element\Submit;
 
 class ManageUsersController extends ControllerBase
 {
-
+	public function initialize()
+	{
+		$user = $this->session->auth;
+		if ($user->getIdrole != 1) {
+			$semantic=$this->semantic;
+			$semantic->setLanguage("fr");
+			$msg=$semantic->htmlMessage("msg","Accès refusé !");
+			$msg->addHeader("Erreur !");
+			$msg->setIcon("warning circle");
+			$msg->addClass("error");
+			$msg->setDismissable();
+				
+			$this->dispatcher->forward(["controller"=>"Index","action" => "index","params" => [$msg]]);
+		}
+	}
+	
     public function indexAction()
     {
     	$this->secondaryMenu($this->controller,$this->action);
