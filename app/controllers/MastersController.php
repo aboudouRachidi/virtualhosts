@@ -2,6 +2,7 @@
 
 use Ajax\semantic\components\search\SearchCategories;
 use Ajax\semantic\components\search\SearchResult;
+use Ajax\service\JArray;
 
 class MastersController extends ControllerBase
 {
@@ -33,7 +34,7 @@ class MastersController extends ControllerBase
     	$form->addInput("password","Mot de passe","password","","Veuillez entrer un mot de passe")->addRules(["empty","minLength[8]"]);
     	$form->addInput("checkpassword","Confirmation mot de passe","password","","Veuillez confirmer le mot de passe")->addRules(["empty","minLength[8]","match[password]"]);
     	$form->addInput("login","Login","text","","Entrez un identifiant" )->addRule("empty");
-    	$form->addDropdown("roles",AppHelper::getAllRoles(),"Roles ","Selectionner un role...",false);
+    	$form->addDropdown("roles",JArray::modelArray(Role::find(),"getId","getName"),"Roles ","Selectionner un role...",false);
     	
     	$form->addButton("btSub1","Ajouter")->asSubmit();
     	//$form->submitOnClick("btSub1", $this->controller."/addUserSubmit", "#content-container");

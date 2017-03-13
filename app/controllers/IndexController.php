@@ -50,6 +50,7 @@ class IndexController extends ControllerBase{
 		$DTUsers->setCaptions(["Nom","Prenom","login","email","Actions"]);
 		$DTUsers->addEditDeleteButtons(true,["ajaxTransition"=>"random"]);
 		$DTUsers->setUrls(["masters/search","masters/vUpdateUser","masters/vDeleteUser"]);
+		$DTUsers->setIdentifierFunction("getId");
 		
 		$search=$semantic->htmlSearch("search7","Chercher utilisateurs...","search");
 		$search->setUrl($this->url->get("masters/userSearch/{query}"))->setType("category")->setFluid();
@@ -77,6 +78,7 @@ class IndexController extends ControllerBase{
 		$DTRoles->setCaptions(["Libelle","Actions"]);
 		$DTRoles->addEditDeleteButtons(true,["ajaxTransition"=>"random"]);
 		$DTRoles->setUrls(["master/search","masters/vUpdateRole","masters/vDeleteRole"]);
+		$DTRoles->setIdentifierFunction("getId");
 		$DTRoles->setTargetSelector("#table-roles-update");
 		
 		$DTRoles->addItemsInToolbar([$btnAddRole]);
