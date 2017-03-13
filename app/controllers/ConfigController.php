@@ -82,7 +82,7 @@ class ConfigController extends ControllerBase
 		$table->setColWidths([8,8]);
 		
 		$table->addFieldButton("Redemarer",false,function(&$bt,$instance){
-			$bt->addIcon("power",true,true);
+			$bt->addIcon("refresh",true,true);
 			$bt->addToProperty("class","restart");
 		});
 		$table->setIdentifierFunction("getId");
