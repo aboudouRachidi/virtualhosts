@@ -9,7 +9,7 @@ class ManageUsersController extends ControllerBase
 	public function initialize()
 	{
 		$user = $this->session->auth;
-		if ($user->getIdrole != 1) {
+		if ($user->getIdrole() == 2) {
 			$semantic=$this->semantic;
 			$semantic->setLanguage("fr");
 			$msg=$semantic->htmlMessage("msg","Accès refusé !");

@@ -199,7 +199,7 @@
   <div class="w3-container w3-dark-grey w3-padding-32">
     <div class="w3-row">
       <div class="w3-container w3-third">
-        <h5 class="w3-bottombar w3-border-green">Demographic</h5>
+        <h5 class="w3-bottombar w3-border-green">Test</h5>
         <p>Language</p>
         <p>Country</p>
         <p>City</p>

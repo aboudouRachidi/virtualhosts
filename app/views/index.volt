@@ -20,7 +20,7 @@
 		<div class="ui container">
 			<div class="ui menu secondary">
 				<div class="header item">
-					<i class="snapchat ghost big icon"></i>
+					<i class="cloud big icon"></i>
 					Virtualhosts
 				</div>
 				{% if this.session.has("auth") %}

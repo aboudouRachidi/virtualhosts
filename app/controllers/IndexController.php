@@ -51,7 +51,7 @@ class IndexController extends ControllerBase{
 		$DTUsers->addEditDeleteButtons(true,["ajaxTransition"=>"random"]);
 		$DTUsers->setUrls(["masters/search","masters/vUpdateUser","masters/vDeleteUser"]);
 		
-		$search=$semantic->htmlSearch("search7","Search countries...","search");
+		$search=$semantic->htmlSearch("search7","Chercher utilisateurs...","search");
 		$search->setUrl($this->url->get("masters/userSearch/{query}"))->setType("category")->setFluid();
 		$search->postOnSelect("masters/userInfo","#table-users-update");
 		

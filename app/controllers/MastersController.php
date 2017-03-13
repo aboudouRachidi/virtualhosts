@@ -223,18 +223,33 @@ class MastersController extends ControllerBase
     }
     
     public function confirmDeleteAction(){
+    	$semantic=$this->semantic;
+    	$semantic->setLanguage("fr");
+    	
     	$user = User::findFirst($_POST['id']);
     
     	if($user->getName() == $_POST['name']){
     		$user->delete();
     
-    		$this->flash->message("success","L'utilisateur '".$_POST['name']."' a été supprimé avec succès");
-    		$this->jquery->get($this->controller,"#table-users-update");
+    		//$this->flash->message("success","L'utilisateur '".$_POST['name']."' a été supprimé avec succès");
+    		//$this->jquery->get($this->controller,"#table-users-update");
+    		
+    		$msg=$semantic->htmlMessage("msg","L'utilisateur '".$_POST['name']."' a été supprimé avec succès");
+    		$msg->addHeader("Bonne nouvelle !");
+    		$msg->setIcon("hand peace");
+    		$msg->addClass("success");
+    		$msg->setDismissable();
+    		
+    		$this->dispatcher->forward(["controller"=>"Index","action" => "index","params" => [$msg]]);
     
     	}else{
     
-    		$this->flash->message("error","L'utilisateur '".$user->getName()."' n'a pas été supprimé : Le nom ne correspond pas ! ");
-    		$this->jquery->get($this->controller,"#table-users-update");
+    		//$this->flash->message("error","L'utilisateur '".$user->getName()."' n'a pas été supprimé : Le nom ne correspond pas ! ");
+    		//$this->jquery->get($this->controller,"#table-users-update");
+    		$msg=$semantic->htmlMessage("msg","L'utilisateur '".$user->getName()."' n'a pas été supprimé : Le nom ne correspond pas ! ");
+    		$msg->addClass("error");
+    		$msg->setDismissable();
+    		$this->dispatcher->forward(["controller"=>"Index","action" => "index","params" => [$msg]]);
     	}
     
     	echo $this->jquery->compile();
@@ -250,13 +265,43 @@ class MastersController extends ControllerBase
     
     	$form=$semantic->htmlForm("frmAdd");
     	$form->setValidationParams(["on"=>"blur","inline"=>true]);
-    	$name = $form->addInput("nameRole","Nom","text")->addRule("empty");
+    	
+    	$fromAction = $this->url->get("$this->controller/addRoleSubmit");
+    	$form->setProperty("action", "$fromAction");
+    	$form->setProperty("method", "post");
+    	
+    	$name = $form->addInput("name","Nom","text")->addRule("empty");
     	$name->getField()->labeledToCorner("asterisk","right");
-    	$form->addButton("submit","Ajouter le rôle","button green")->postFormOnClick("ManageRole/newRole","frmAdd","#result");
+    	$form->addButton("submit","Ajouter le rôle","button green")->asSubmit();
     	$this->jquery->compile($this->view);
     }
     
+    public function addRoleSubmitAction(){
+    	$semantic=$this->semantic;
+    	$semantic->setLanguage("fr");
+    	 
+    	$role=new Role();
+    	 
+    	if($this->request->getPost("name") !== null ){
     
+	    	$role->save($_POST);
+	    	 
+	    	$msg=$semantic->htmlMessage("msg","Le role a été ajouté !");
+	    	$msg->addHeader("Bonne nouvelle !");
+	    	$msg->setIcon("hand peace");
+	    	$msg->addClass("success");
+	    	$msg->setDismissable();
+	    	 
+	    	$this->dispatcher->forward(["controller"=>"Index","action" => "index","params" => [$msg]]);
+    	
+    	}else{
+    		$msg=$semantic->htmlMessage("msg","Veuillez saisir un role !");
+    		$msg->addClass("error");
+    		$msg->setDismissable();
+    		$this->dispatcher->forward(["controller"=>"Index","action" => "index","params" => [$msg]]);
+    	}
+    	 
+    }
 
     
     
@@ -339,18 +384,31 @@ class MastersController extends ControllerBase
     }
     
     public function confirmDeleteRoleAction(){
+    	$semantic=$this->semantic;
+    	$semantic->setLanguage("fr");
     	$role = Role::findFirst($_POST['id']);
     
     	if($role->getName() == $_POST['name']){
     		$role->delete();
     
-    		$this->flash->message("success","Le role '".$_POST['name']."' a été supprimé avec succès");
-    		$this->jquery->get($this->controller,"#table-role-update");
+    		//$this->flash->message("success","Le role '".$_POST['name']."' a été supprimé avec succès");
+    		//$this->jquery->get("Index/index","#table-role-update");
+    		
+    		$msg=$semantic->htmlMessage("msg","Le role '".$_POST['name']."' a été supprimé avec succès");
+    		$msg->addHeader("Bonne nouvelle !");
+    		$msg->setIcon("hand peace");
+    		$msg->addClass("success");
+    		$msg->setDismissable();
+    		$this->dispatcher->forward(["controller"=>"Index","action" => "index","params" => [$msg]]);
     
     	}else{
     
-    		$this->flash->message("error","Le roles '".$role->getName()."' n'a pas été supprimé : Le nom ne correspond pas ! ");
-    		$this->jquery->get($this->controller,"#table-role-update");
+    		//$this->flash->message("error","Le roles '".$role->getName()."' n'a pas été supprimé : Le nom ne correspond pas ! ");
+    		//$this->jquery->get($this->controller,"#table-role-update");
+    		$msg=$semantic->htmlMessage("msg","Le roles '".$role->getName()."' n'a pas été supprimé : Le nom ne correspond pas ! ");
+    		$msg->addClass("error");
+    		$msg->setDismissable();
+    		$this->dispatcher->forward(["controller"=>"Index","action" => "index","params" => [$msg]]);
     	}
     
     	echo $this->jquery->compile();
