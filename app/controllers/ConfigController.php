@@ -50,16 +50,35 @@ class ConfigController extends ControllerBase
 		
 		$user = $this->session->auth;
 		$user = User::findFirst($user->getId());
-				
-		$vhs = Virtualhost::find("idUser=".$user->getId());
 		
-	    
-		
+		$srvs = Server::find("idHost=".$machine->getId());
 		$semantic=$this->semantic;
 		
+		$form=$semantic->htmlForm("frm2");
+		
+		$separation=$semantic->htmlDivider("");
+		$form->addItem($separation);
+		
+		$titre=$semantic->htmlHeader("",3,"Liste des virtualhosts pour la machine ".$machine->getName())->setAttachment($segment,"top");
+		$form->addItem($titre);
+		
+		if (count(Server::find("idHost=".$machine->getId()))==0){
+			$mess=$semantic->htmlMessage("mess5","Aucun Virtualhost disponible pour cette machine...");
+			$mess->setVariation("floating");
+			$mess->setIcon("snapchat ghost big");
+			$form->addItem($mess);
+			
+		}
+		
+		foreach ($srvs as $srv){
+		$vhs = Virtualhost::find("idServer=".$srv->getId());
+		
+
+		
 		$table=$semantic->dataTable("table","VirtualHost",$vhs);
-		$table->setFields(["name", "idServer"]);
-		$table->setCaptions(["Nom","Serveur","Actions"]);
+		$table->setFields(["name"]);
+		$table->setCaptions(["Nom","Actions"]);
+		
 		$table->addFieldButton("Redemarer",false,function(&$bt,$instance){
 			$bt->addIcon("power",true,true);
 			$bt->addToProperty("class","restart");
@@ -69,6 +88,12 @@ class ConfigController extends ControllerBase
 		$table->asForm();
 		$table->submitOnClick("Redemarer","Config/rebot","#reboot");
 		
+		$label=$semantic->htmlSegment("label");
+		$label->addLabel("Serveur : ". $srv->getName())->asRibbon()->setColor("red");
+		$label->addContent($table);
+		
+		$form->addItem($label);
+		}
 
 		$this->jquery->compile($this->view);
 		
