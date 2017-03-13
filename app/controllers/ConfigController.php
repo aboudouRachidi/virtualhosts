@@ -60,12 +60,13 @@ class ConfigController extends ControllerBase
 		$form->addItem($separation);
 		
 		$titre=$semantic->htmlHeader("",3,"Liste des virtualhosts pour la machine ".$machine->getName())->setAttachment($segment,"top");
+		$titre->addIcon("disk outline");
 		$form->addItem($titre);
 		
 		if (count(Server::find("idHost=".$machine->getId()))==0){
 			$mess=$semantic->htmlMessage("mess5","Aucun Virtualhost disponible pour cette machine...");
 			$mess->setVariation("floating");
-			$mess->setIcon("snapchat ghost big");
+			$mess->setIcon("cloud big");
 			$form->addItem($mess);
 			
 		}
@@ -78,6 +79,7 @@ class ConfigController extends ControllerBase
 		$table=$semantic->dataTable("table","VirtualHost",$vhs);
 		$table->setFields(["name"]);
 		$table->setCaptions(["Nom","Actions"]);
+		$table->setColWidths([8,8]);
 		
 		$table->addFieldButton("Redemarer",false,function(&$bt,$instance){
 			$bt->addIcon("power",true,true);
