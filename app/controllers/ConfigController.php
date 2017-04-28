@@ -34,17 +34,46 @@ class ConfigController extends ControllerBase
 		$itemsHost = JArray::modelArray($host,"getId","getName");
 		$form=$semantic->htmlForm("frm");
 		$form->addField(new HtmlFormDropdown("machine",$itemsHost,"Machine","Selectionnez un machine"));
-		$form->addButton("btnValider","Valider","ui green button")->setTagName("a")->addIcon("checkmark icon");
-		$form->submitOnClick("btnValider","Config/liste","#liste");
+		
+		
+
+		
+		$btnAddUser = $semantic->htmlButton("btnAddUser","Ajouter utilisateur","ui basic button");
+		$btnAddUser->addIcon("icon add user",true,false);
+		$btnAddUser->getOnClick("masters/vAddUser","#liste");
+		
+
+		$DTUsers=$semantic->dataTable("tableau","Host",$host);
+		$DTUsers->setFields(["name","ipv4","ipv6"]);
+		$DTUsers->setCaptions(["Nom","IPv4","IPv6","VirstualHost"]);
+		$DTUsers->addB
+		$DTUsers->setUrls(["Config/liste"]);
+	
+		$DTUsers->setIdentifierFunction("getId");
+		
+		
+		$DTUsers->addItemsInToolbar([$btnAddUser]);
+		
+		$DTUsers->setToolbarPosition(Ajax\semantic\widgets\datatable\PositionInTable::FOOTER);
+		$DTUsers->getToolbar()->setSecondary();
+		
+		$DTUsers->setTargetSelector("#liste");
+
+		//$form->addButton("btnValider","Valider","ui green button")->setTagName("a")->addIcon("checkmark icon");
+		//$form->submitOnClick("btnValider","Config/liste","#liste");
+		
+
+		
+			
 		$this->jquery->compile($this->view);
 
 	}
-	public function listeAction(){
-		if ($this->request->isPost()) {
+	public function listeAction($machine){
+		/* if ($this->request->isPost()) {
 			// récupére les donnée dans le formulaire
 			$machine   = $this->request->getPost("machine");
 			
-		}
+		} */
 		$machine=Host::findFirst("id= ".$machine);
 		$this->view->setVars(["machine"=>$machine]);
 		
