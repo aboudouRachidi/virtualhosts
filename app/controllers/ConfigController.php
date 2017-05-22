@@ -36,20 +36,44 @@ class ConfigController extends ControllerBase
 		$form->addField(new HtmlFormDropdown("machine",$itemsHost,"Machine","Selectionnez un machine"));
 		
 		
+		
+		
+		
 
 		
 		$btnAddUser = $semantic->htmlButton("btnAddUser","Ajouter utilisateur","ui basic button");
 		$btnAddUser->addIcon("icon add user",true,false);
 		$btnAddUser->getOnClick("masters/vAddUser","#liste");
 		
+		
+		$cards=$semantic->htmlCardGroups("cards2");
+		$cards->setWide(3);
+		$cards->fromDatabaseObjects($host,function($host) use ($cards){
+			
+			$card=$cards->newItem("card-".$host->getId());
+			
+			$card->addItemHeaderContent($host->getName(),$host->getIpv4(),$host->getIpv6());
+			$extra=$card->addExtraContent();
+			$extra->getOnClick("config/liste/".$host->getId(),"#liste2");
+			return $card;
+			/*return [
+					"header"=>$h->getName() ." <br/> IPv4 : ".$h->getIpv4() ."<br/> IPv6 : ". $h->getIpv6()										
+			];*/
+					
+		});
+
+
+		
 
 		$DTUsers=$semantic->dataTable("tableau","Host",$host);
 		$DTUsers->setFields(["name","ipv4","ipv6"]);
 		$DTUsers->setCaptions(["Nom","IPv4","IPv6","VirstualHost"]);
-		$DTUsers->addB
-		$DTUsers->setUrls(["Config/liste"]);
-	
 		$DTUsers->setIdentifierFunction("getId");
+		$DTUsers->addFieldButton("Liste des VirstualHosts",false,function(&$bt,$instance){$bt->addIcon("archive",true,true);$bt->getOnClick("config/liste/1");
+		});
+		
+	
+		
 		
 		
 		$DTUsers->addItemsInToolbar([$btnAddUser]);
