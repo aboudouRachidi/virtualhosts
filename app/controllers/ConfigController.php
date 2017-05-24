@@ -13,24 +13,24 @@ class ConfigController extends ControllerBase
 		$this->secondaryMenu($this->controller,$this->action);
 		$this->tools($this->controller,$this->action);
 		
-		$servers=Server::find();
-		$this->view->setVars(["servers"=>$servers]);
-		
-		//$hosts=Host::find();
-		//$this->view->setVars(["hosts"=>$hosts]);
+
 		
 		$user = $this->session->auth;
 		$user = User::findFirst($user->getId());
 		
-		$virtualhosts=Virtualhost::find();
-		$this->view->setVars(["virtualhosts"=>$virtualhosts,"user"=>$user]);
-		
+
 		$semantic=$this->semantic;
 		
 		$mess=$semantic->htmlMessage("mess1","Cette interface permet aux utilisateurs de redémarer les VirtualHosts de la machine selectionné.");
 		$mess->setVariation("floating");
 
-		$host = Host::find("idUser=".$user->getId());
+		
+		if($user->getIdrole()==2){
+			$host = Host::find("idUser=".$user->getId());
+		}
+		elseif ($user->getIdrole()==1){
+			$host = Host::find();
+		}
 		$itemsHost = JArray::modelArray($host,"getId","getName");
 		$form=$semantic->htmlForm("frm");
 		$form->addField(new HtmlFormDropdown("machine",$itemsHost,"Machine","Selectionnez un machine"));
@@ -41,51 +41,27 @@ class ConfigController extends ControllerBase
 		
 
 		
-		$btnAddUser = $semantic->htmlButton("btnAddUser","Ajouter utilisateur","ui basic button");
-		$btnAddUser->addIcon("icon add user",true,false);
-		$btnAddUser->getOnClick("masters/vAddUser","#liste");
-		
+		$btnAddHost = $semantic->htmlButton("btnAddUser","Ajouter utilisateur","ui basic button");
+		$btnAddHost->addIcon("icon add user",true,false);
+		$btnAddHost->getOnClick("masters/vAddUser","#liste");
 		
 		$cards=$semantic->htmlCardGroups("cards2");
 		$cards->setWide(3);
 		$cards->fromDatabaseObjects($host,function($host) use ($cards){
-			
-			$card=$cards->newItem("card-".$host->getId());
-			
-			$card->addItemHeaderContent($host->getName(),$host->getIpv4(),$host->getIpv6());
-			$extra=$card->addExtraContent();
-			$extra->getOnClick("config/liste/".$host->getId(),"#liste2");
-			return $card;
-			/*return [
-					"header"=>$h->getName() ." <br/> IPv4 : ".$h->getIpv4() ."<br/> IPv6 : ". $h->getIpv6()										
-			];*/
+
 					
+			$card=$cards->newItem("card-".$host->getId());
+			$card->setIdentifier($host->getId());
+			$idHost=$card->getIdentifier();
+						
+			$card->addItemHeaderContent($host->getName(),$host->getIpv4());
+			$card->addToProperty("data-ajax", $host->getId());
+
+			$card->getOnClick("Config/liste/".$idHost,"#liste2");
+			return $card;					
 		});
-
-
 		
 
-		$DTUsers=$semantic->dataTable("tableau","Host",$host);
-		$DTUsers->setFields(["name","ipv4","ipv6"]);
-		$DTUsers->setCaptions(["Nom","IPv4","IPv6","VirstualHost"]);
-		$DTUsers->setIdentifierFunction("getId");
-		$DTUsers->addFieldButton("Liste des VirstualHosts",false,function(&$bt,$instance){$bt->addIcon("archive",true,true);$bt->getOnClick("config/liste/1");
-		});
-		
-	
-		
-		
-		
-		$DTUsers->addItemsInToolbar([$btnAddUser]);
-		
-		$DTUsers->setToolbarPosition(Ajax\semantic\widgets\datatable\PositionInTable::FOOTER);
-		$DTUsers->getToolbar()->setSecondary();
-		
-		$DTUsers->setTargetSelector("#liste");
-
-		//$form->addButton("btnValider","Valider","ui green button")->setTagName("a")->addIcon("checkmark icon");
-		//$form->submitOnClick("btnValider","Config/liste","#liste");
-		
 
 		
 			
