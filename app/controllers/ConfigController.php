@@ -21,7 +21,7 @@ class ConfigController extends ControllerBase
 
 		$semantic=$this->semantic;
 		
-		$mess=$semantic->htmlMessage("mess1","Cette interface permet aux utilisateurs de redémarer les VirtualHosts de la machine selectionné.");
+		$mess=$semantic->htmlMessage("mess1","Cette interface permet aux utilisateurs d'avoir accés aux VirtualHosts de leurs differentes machines.");
 		$mess->setVariation("floating");
 
 		
@@ -31,19 +31,14 @@ class ConfigController extends ControllerBase
 		elseif ($user->getIdrole()==1){
 			$host = Host::find();
 		}
-		$itemsHost = JArray::modelArray($host,"getId","getName");
-		$form=$semantic->htmlForm("frm");
-		$form->addField(new HtmlFormDropdown("machine",$itemsHost,"Machine","Selectionnez un machine"));
-		
-		
-		
-		
-		
+
 
 		
-		$btnAddHost = $semantic->htmlButton("btnAddUser","Ajouter utilisateur","ui basic button");
-		$btnAddHost->addIcon("icon add user",true,false);
-		$btnAddHost->getOnClick("masters/vAddUser","#liste");
+		$btnAddHost = $semantic->htmlButton("btnAddHost","Ajouter une machine","ui basic button");
+		$btnAddHost->addIcon("icon add",false,true);
+		$btnAddHost->getOnClick("Config/addHost","#addHost");
+		
+
 		
 		$cards=$semantic->htmlCardGroups("cards2");
 		$cards->setWide(3);
@@ -57,7 +52,7 @@ class ConfigController extends ControllerBase
 			$card->addItemHeaderContent($host->getName(),$host->getIpv4());
 			$card->addToProperty("data-ajax", $host->getId());
 
-			$card->getOnClick("Config/liste/".$idHost,"#liste2");
+			$card->getOnClick("Config/liste/".$idHost,"#liste");
 			return $card;					
 		});
 		
@@ -68,6 +63,23 @@ class ConfigController extends ControllerBase
 		$this->jquery->compile($this->view);
 
 	}
+	
+	public function addHostAction(){
+		
+		$semantic=$this->semantic;
+		$semantic->setLanguage("fr");
+		$semantic->htmlMessage ( "messageInfo", "<b> Veuillez rentrer les informations de votre machine.");
+		$form = $semantic->htmlForm("formAddHost");
+		$form->setValidationParams(["on"=>"blur","inline"=>true]);
+		$form->addInput("name","Nom","text","","Entrez le nom de votre machine")->addRule("empty");
+		$form->addInput("ipv4","IPv4","text","","Entrez l'addresse IPv4 de votre machine")->addRule("empty");
+		$form->addInput("ipv6","IPv6","text","","Entrez l'addresse IPv6 de votre machine")->addRules(["empty"]);
+		$form->addButton("btSub1","Ajouter")->asSubmit();
+		$form->submitOnClick("btSub1", "Sign/test", "#content-container");
+		$this->jquery->compile($this->view);
+	}
+	
+	
 	public function listeAction($machine){
 		/* if ($this->request->isPost()) {
 			// récupére les donnée dans le formulaire
