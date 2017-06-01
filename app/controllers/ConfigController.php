@@ -78,7 +78,7 @@ class ConfigController extends ControllerBase
 		$form->addItem($titre);
 		$form->addInput("name","Nom","text","","Entrez le nom de votre machine")->addRule("empty");
 		$form->addInput("ipv4","IPv4","text","","Entrez l'addresse IPv4 de votre machine")->addRule("empty");
-		$form->addInput("ipv6","IPv6","text","","Entrez l'addresse IPv6 de votre machine")->addRules(["empty"]);
+		$form->addInput("ipv6","IPv6","text","","Entrez l'addresse IPv6 de votre machine");
 		$form->addButton("btSub1","Ajouter")->asSubmit();
 		$form->submitOnClick("btSub1", "Config/createHost", "#content-container");
 		$this->jquery->compile($this->view);
@@ -90,7 +90,7 @@ class ConfigController extends ControllerBase
 		$user = $user->getId();
 		$host->setIdUser($user);
 		$host->save($_POST);
-		$this->jquery->compile($this->view);
+		$this->response->redirect("$this->controller/index");
 	}
 	
 	
@@ -114,9 +114,16 @@ class ConfigController extends ControllerBase
 		$separation=$semantic->htmlDivider("");
 		$form->addItem($separation);
 		
+	
+		
 		$titre=$semantic->htmlHeader("",3,"Liste des virtualhosts pour la machine ".$machine->getName())->setAttachment($segment,"top");
 		$titre->addIcon("disk outline");
 		$form->addItem($titre);
+		
+		$btdel=$semantic->htmlButton("bt11","Supprimer");
+		$btdel->addIcon("remove",false,true);
+		$btdel->getOnClick("Config/deleteHost/".$machine->getId(),"#del");
+		$form->addItem($btdel);
 		
 		if (count(Server::find("idHost=".$machine->getId()))==0){
 			$mess=$semantic->htmlMessage("mess5","Aucun Virtualhost disponible pour cette machine...");
@@ -155,6 +162,38 @@ class ConfigController extends ControllerBase
 		$this->jquery->compile($this->view);
 		
 		
+	}
+	
+	public function deleteHostAction($id){
+		$this->secondaryMenu($this->controller,$this->action);
+		$this->tools($this->controller,$this->action);
+		
+		$host = Host::findFirst($id);
+		
+		$semantic=$this->semantic;
+		$semantic->setLanguage("fr");
+		
+		$btnCancel = $semantic->htmlButton("btnCancel","Annuler","red");
+		$btnCancel->getOnClick($this->controller."/index","#index");
+		
+		$form=$semantic->htmlForm("frmDelete");
+		$form->setValidationParams(["on"=>"blur","inline"=>true]);
+		$form->addErrorMessage();
+		
+		$form->addHeader("Voulez-vous vraiment supprimer l'élément : ". $host->getName()." ? ",3);
+		$form->addInput("id",NULL,"hidden",$host->getId());
+		$nom = $form->addInput("name","Nom *:","text",NULL,"Confirmer le nom de la machine")->addRule("empty");
+		$nom->getField()->labeledToCorner("asterisk","right");
+		
+		$form->addButton("submit", "Supprimer","ui negative button")->asSubmit();
+		$form->submitOnClick("submit",$this->controller."/confirmDelete","#divAction");
+		
+		$form->addButton("btnCancel", "Annuler","ui positive button");
+		
+		
+		$this->view->setVars(["element"=>$host]);
+		
+		$this->jquery->compile($this->view);
 	}
 	
 	public function rebootAction($id){
