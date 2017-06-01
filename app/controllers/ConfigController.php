@@ -70,12 +70,26 @@ class ConfigController extends ControllerBase
 		$semantic->setLanguage("fr");
 		$semantic->htmlMessage ( "messageInfo", "<b> Veuillez rentrer les informations de votre machine.");
 		$form = $semantic->htmlForm("formAddHost");
+		$separation=$semantic->htmlDivider("");
+		$form->addItem($separation);
 		$form->setValidationParams(["on"=>"blur","inline"=>true]);
+		$titre=$semantic->htmlHeader("",3,"Ajouter une machine ")->setAttachment($segment,"top");
+		$titre->addIcon("disk outline");
+		$form->addItem($titre);
 		$form->addInput("name","Nom","text","","Entrez le nom de votre machine")->addRule("empty");
 		$form->addInput("ipv4","IPv4","text","","Entrez l'addresse IPv4 de votre machine")->addRule("empty");
 		$form->addInput("ipv6","IPv6","text","","Entrez l'addresse IPv6 de votre machine")->addRules(["empty"]);
 		$form->addButton("btSub1","Ajouter")->asSubmit();
-		$form->submitOnClick("btSub1", "Sign/test", "#content-container");
+		$form->submitOnClick("btSub1", "Config/createHost", "#content-container");
+		$this->jquery->compile($this->view);
+	}
+	
+	public function createHostAction(){
+		$host=new Host();
+		$user = $this->session->auth;
+		$user = $user->getId();
+		$host->setIdUser($user);
+		$host->save($_POST);
 		$this->jquery->compile($this->view);
 	}
 	
