@@ -181,17 +181,21 @@ class TypeServersController extends ControllerBase
     }
     
     public function confirmDeleteAction(){
+    	$this->secondaryMenu($this->controller,$this->action);
+    	$this->tools($this->controller,$this->action);
+    	
+    	
     	$Stype = Stype::findFirst($_POST['id']);
     	
     	if($Stype->getName() == $_POST['name']){
     		$Stype->delete();
     		
-    		$this->flash->message("success","Le type de serveur '".$_POST['name']."' a Ã©tÃ© supprimÃ© avec succÃ¨s");
+    		$this->flash->message("success","Le type de serveur '".$_POST['name']."' a été supprimé avec succés");
     		$this->jquery->get($this->controller,"#refresh");
     		
     	}else{
     		
-    		$this->flash->message("error","Le type de serveur '".$Stype->getName()."' n'a pas Ã©tÃ© supprimÃ© : Le nom ne correspond pas ! ");
+    		$this->flash->message("error","Le type de serveur '".$Stype->getName()."' n'a pas été supprimé : Le nom ne correspond pas ! ");
     		$this->jquery->get($this->controller,"#refresh");
     	}
     	

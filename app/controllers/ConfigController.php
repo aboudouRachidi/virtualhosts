@@ -115,14 +115,16 @@ class ConfigController extends ControllerBase
 		$form->addItem($separation);
 		
 	
+		$btdel=$semantic->htmlButton("btdel","Supprimer");
+		$btdel->addIcon("remove",false,true);
+		$btdel->getOnClick("Config/deleteHost/".$machine->getId(),"#del");
 		
 		$titre=$semantic->htmlHeader("",3,"Liste des virtualhosts pour la machine ".$machine->getName())->setAttachment($segment,"top");
 		$titre->addIcon("disk outline");
+		
 		$form->addItem($titre);
 		
-		$btdel=$semantic->htmlButton("bt11","Supprimer");
-		$btdel->addIcon("remove",false,true);
-		$btdel->getOnClick("Config/deleteHost/".$machine->getId(),"#del");
+	
 		$form->addItem($btdel);
 		
 		if (count(Server::find("idHost=".$machine->getId()))==0){
@@ -165,8 +167,6 @@ class ConfigController extends ControllerBase
 	}
 	
 	public function deleteHostAction($id){
-		$this->secondaryMenu($this->controller,$this->action);
-		$this->tools($this->controller,$this->action);
 		
 		$host = Host::findFirst($id);
 		
@@ -174,26 +174,47 @@ class ConfigController extends ControllerBase
 		$semantic->setLanguage("fr");
 		
 		$btnCancel = $semantic->htmlButton("btnCancel","Annuler","red");
-		$btnCancel->getOnClick($this->controller."/index","#index");
+		$btnCancel->getOnClick($this->controller."/liste","#liste");
 		
 		$form=$semantic->htmlForm("frmDelete");
+		
 		$form->setValidationParams(["on"=>"blur","inline"=>true]);
 		$form->addErrorMessage();
 		
 		$form->addHeader("Voulez-vous vraiment supprimer l'Ã©lÃ©ment : ". $host->getName()." ? ",3);
+		$form->addMessage("msg","Si vous supprimer ce Host tout les serveurs et Virtualhost qu'il contiennenet le seront aussi !","Attention !","error")->setIcon("warning sign");;
 		$form->addInput("id",NULL,"hidden",$host->getId());
 		$nom = $form->addInput("name","Nom *:","text",NULL,"Confirmer le nom de la machine")->addRule("empty");
 		$nom->getField()->labeledToCorner("asterisk","right");
 		
+		$form->addButton("btnCancel", "Annuler","ui positive button");
+		
 		$form->addButton("submit", "Supprimer","ui negative button")->asSubmit();
 		$form->submitOnClick("submit",$this->controller."/confirmDelete","#divAction");
 		
-		$form->addButton("btnCancel", "Annuler","ui positive button");
 		
 		
 		$this->view->setVars(["element"=>$host]);
 		
 		$this->jquery->compile($this->view);
+	}
+	
+	public function confirmDeleteAction(){
+		$Host = Host::findFirst($_POST['id']);
+		
+		if($Host->getName() == $_POST['name']){
+			$Host->delete();
+			
+			$this->flash->message("success","Le type de serveur '".$_POST['name']."' a été supprimé avec succés");
+			$this->jquery->get($this->controller,"#refresh");
+			
+		}else{
+			
+			$this->flash->message("error","Le type de serveur '".$Host->getName()."' n'a pas été supprimé : Le nom ne correspond pas ! ");
+			$this->jquery->get($this->controller,"#refresh");
+		}
+		
+		echo $this->jquery->compile();
 	}
 	
 	public function rebootAction($id){
