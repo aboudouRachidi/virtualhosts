@@ -7,7 +7,7 @@ use Ajax\service\JArray;
 class ConfigController extends ControllerBase
 {
 
-	public function indexAction()
+	public function indexAction($msg)
 	{
 		
 		$this->secondaryMenu($this->controller,$this->action);
@@ -23,8 +23,9 @@ class ConfigController extends ControllerBase
 		
 		$mess=$semantic->htmlMessage("mess1","Cette interface permet aux utilisateurs d'avoir accÃ©s aux VirtualHosts de leurs differentes machines.");
 		$mess->setVariation("floating");
-
 		
+
+
 		if($user->getIdrole()==2){
 			$host = Host::find("idUser=".$user->getId());
 		}
@@ -36,9 +37,9 @@ class ConfigController extends ControllerBase
 		
 		$btnAddHost = $semantic->htmlButton("btnAddHost","Ajouter une machine","ui basic button");
 		$btnAddHost->addIcon("icon add",false,true);
-		$btnAddHost->getOnClick("Config/addHost","#addHost");
+		$btnAddHost->getOnClick("Config/addHost","#modifHost");
 		
-
+		
 		
 		$cards=$semantic->htmlCardGroups("cards2");
 		$cards->setWide(3);
@@ -85,6 +86,7 @@ class ConfigController extends ControllerBase
 	}
 	
 	public function createHostAction(){
+		
 		$host=new Host();
 		$user = $this->session->auth;
 		$user = $user->getId();
@@ -117,7 +119,7 @@ class ConfigController extends ControllerBase
 	
 		$btdel=$semantic->htmlButton("btdel","Supprimer");
 		$btdel->addIcon("remove",false,true);
-		$btdel->getOnClick("Config/deleteHost/".$machine->getId(),"#del");
+		$btdel->getOnClick("Config/deleteHost/".$machine->getId(),"#modifHost");
 		
 		$titre=$semantic->htmlHeader("",3,"Liste des virtualhosts pour la machine ".$machine->getName())->setAttachment($segment,"top");
 		$titre->addIcon("disk outline");
@@ -167,14 +169,14 @@ class ConfigController extends ControllerBase
 	}
 	
 	public function deleteHostAction($id){
+		$this->secondaryMenu($this->controller,$this->action);
+		$this->tools($this->controller,$this->action);
 		
 		$host = Host::findFirst($id);
 		
 		$semantic=$this->semantic;
 		$semantic->setLanguage("fr");
 		
-		$btnCancel = $semantic->htmlButton("btnCancel","Annuler","red");
-		$btnCancel->getOnClick($this->controller."/liste","#liste");
 		
 		$form=$semantic->htmlForm("frmDelete");
 		
@@ -182,7 +184,6 @@ class ConfigController extends ControllerBase
 		$form->addErrorMessage();
 		
 		$form->addHeader("Voulez-vous vraiment supprimer l'Ã©lÃ©ment : ". $host->getName()." ? ",3);
-		$form->addMessage("msg","Si vous supprimer ce Host tout les serveurs et Virtualhost qu'il contiennenet le seront aussi !","Attention !","error")->setIcon("warning sign");;
 		$form->addInput("id",NULL,"hidden",$host->getId());
 		$nom = $form->addInput("name","Nom *:","text",NULL,"Confirmer le nom de la machine")->addRule("empty");
 		$nom->getField()->labeledToCorner("asterisk","right");
@@ -194,30 +195,33 @@ class ConfigController extends ControllerBase
 		
 		
 		
-		$this->view->setVars(["element"=>$host]);
+		//$this->view->setVars(["element"=>$host]);
 		
 		$this->jquery->compile($this->view);
 	}
 	
 	public function confirmDeleteAction(){
+		$this->secondaryMenu($this->controller,$this->action);
+		$this->tools($this->controller,$this->action);
+		
 		$Host = Host::findFirst($_POST['id']);
 		
 		if($Host->getName() == $_POST['name']){
-			$Host->delete();
-			
-			$this->flash->message("success","Le type de serveur '".$_POST['name']."' a été supprimé avec succés");
+			$this->flash->message("success","Le host a été supprimé avec succés");
 			$this->jquery->get($this->controller,"#refresh");
 			
 		}else{
 			
-			$this->flash->message("error","Le type de serveur '".$Host->getName()."' n'a pas été supprimé : Le nom ne correspond pas ! ");
+			$this->flash->message("error","Le host n'a pas été supprimé : Le nom ne correspond pas ! ");
 			$this->jquery->get($this->controller,"#refresh");
 		}
 		
-		echo $this->jquery->compile();
+		$this->jquery->compile($this->view);
+		
 	}
 	
 	public function rebootAction($id){
+		
 		$this->view->disable();
 		echo $id;
 		

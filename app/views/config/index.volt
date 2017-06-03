@@ -6,14 +6,14 @@
 </br>
 {{ q["cards2"] }}
 </br>
-<div id="refresh"></div>
+<div id="refresh">
 
-<div id="addHost"></div>
+<div id="modifHost"></div>
 </br>
 </br>
-<div id="del"></div>
+
 <div id="liste"></div>
-
+</div>
 {{ script_foot }}
 
 
