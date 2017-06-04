@@ -25,8 +25,7 @@
 				</div>
 				{% if this.session.has("auth") %}
 				
-				<a href="{{url.get()}}" class="item">Accueil</a>
-				<a class="item">Testimonials</a> 
+				 <!-- <a href="{{url.get()}}" class="item">Accueil</a> -->
 				<a href={{ url("Accueil/logout") }} class="item">Déconnexion</a>
 				
 				{% else %}

@@ -1,7 +1,7 @@
 
 <div class="ui black message">
   <div class="header">
-    <p class="ui red header">Attention ! </p>Suppression type de server : <span class="ui red tiny label">{{ element.getName() }}</span>
+    <p class="ui red header">Attention ! </p>Suppression </span>
   </div>
 </div>
 <div class="ui error message">

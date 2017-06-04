@@ -148,13 +148,15 @@ class ConfigController extends ControllerBase
 		$table->setColWidths([8,8]);
 		
 		$table->addFieldButton("Redemarer",false,function(&$bt,$instance){
-			$bt->addIcon("refresh",true,true);
+			$bt->addIcon("settings",true,true);
 			$bt->addToProperty("class","restart");
 		});
 		$table->setIdentifierFunction("getId");
-		$this->jquery->getOnClick("#table .restart", "config/reboot","#liste",["attr"=>"data-ajax"]);
+		$id=$table->getIdentifier();
+		$this->jquery->getOnClick("#table .restart", "VirtualHosts/config","#liste",["attr"=>"data-ajax"]);
 		$table->asForm();
-		$table->submitOnClick("Redemarer","Config/rebot","#reboot");
+		$table->submitOnClick("Information","VirtualHosts/config","#liste");
+
 		
 		$label=$semantic->htmlSegment("label");
 		$label->addLabel("Serveur : ". $srv->getName())->asRibbon()->setColor("red");
