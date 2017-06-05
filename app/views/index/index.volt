@@ -2,14 +2,14 @@
 <!-- Page Container -->
 
 </div>
-<p>You're now flying with Phalcon. Great things are about to happen!</p>
+<!-- <p>You're now flying with Phalcon. Great things are about to happen!</p>
 
 <p>This page is located at <code>views/index/index.volt</code></p>
 
 <div id="file"></div>
 
 {{ q["btAfficher"] }} {{ q["btApache"] }} {{ q["btNginx"] }} {{ q["btTmp"] }} {{ q["btEx"] }}
-{{ q["message1"] }}
+{{ q["message1"] }} -->
 
 {% if(user.getIdrole() == 2) %}
 <div class="w3-container w3-content" style="max-width:1400px;margin-top:80px">
@@ -193,10 +193,12 @@
             </div>
         </div>
     </div>
-
+    
+<div>{{ q["type-serv"] }} {{ q["type-prop"] }} {{ q["prop"] }}</div>
+<div id="bt-effet"></div>
   <hr>
 
-  <div class="w3-container w3-dark-grey w3-padding-32">
+<!--  <div class="w3-container w3-dark-grey w3-padding-32">
     <div class="w3-row">
       <div class="w3-container w3-third">
         <h5 class="w3-bottombar w3-border-green">Test</h5>
@@ -218,7 +220,7 @@
         <p>Interests</p>
       </div>
     </div>
-  </div>
+  </div> -->
 
   <!-- End page content -->
 </div>

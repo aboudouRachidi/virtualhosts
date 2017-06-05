@@ -147,7 +147,7 @@ class ConfigController extends ControllerBase
 		$table->setCaptions(["Nom","Actions"]);
 		$table->setColWidths([8,8]);
 		
-		$table->addFieldButton("Redemarer",false,function(&$bt,$instance){
+		$table->addFieldButton("Information",false,function(&$bt,$instance){
 			$bt->addIcon("settings",true,true);
 			$bt->addToProperty("class","restart");
 		});

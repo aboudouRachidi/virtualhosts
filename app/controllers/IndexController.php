@@ -94,6 +94,11 @@ class IndexController extends ControllerBase{
 		$nbVhosts = AppHelper::getNbVhosts();
 		$nbServers = AppHelper::getNbServers();
 		
+		$typeServ=$semantic->htmlButton("type-serv","Gestion types servers")->getOnClick("TypeServers/index","#bt-effet");
+		$typeProp=$semantic->htmlButton("type-prop","Gestion types proprietes")->getOnClick("TypeProperty/index","#bt-effet");
+		$prop=$semantic->htmlButton("prop","Gestion proprietes")->getOnClick("Property/index","#bt-effet");
+		
+		
 		
 		$this->view->setVars([
 				"user"=>$user,
