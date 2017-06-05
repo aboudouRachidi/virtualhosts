@@ -13,8 +13,11 @@
 </br>
 </br>
 
-<div id="liste"></div>
+
 </div>
+<h1 class="ui dividing header">Mes VirtualHosts etant sur le serveur de location </h1>
+{{ q["tableVh"] }}
+
 {{ script_foot }}
 
 

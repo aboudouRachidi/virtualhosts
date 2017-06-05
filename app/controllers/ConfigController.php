@@ -57,6 +57,26 @@ class ConfigController extends ControllerBase
 			return $card;					
 		});
 		
+		
+			//$vhs = Virtualhost::find("idUser=".$user->getId()." and idServer  NOT IN (SELECT server.id FROM server WHERE idHost IN (SELECT host.id FROM host WHERE host.idUser = ".$user->getId()."))");
+			
+
+			$vhs = Virtualhost::find("idUser=".$user->getId()." and idServer=3");
+			
+			$table=$semantic->dataTable("tableVh","VirtualHost",$vhs);
+			$table->setFields(["name"]);
+			$table->setCaptions(["Nom","Actions"]);
+			$table->setColWidths([8,8]);
+			
+			$table->addFieldButton("Information",false,function(&$bt,$instance){
+				$bt->addIcon("settings",true,true);
+				$bt->addToProperty("class","restart");
+			});
+				$table->setIdentifierFunction("getId");
+				$id=$table->getIdentifier();
+				$this->jquery->getOnClick("#table .restart", "VirtualHosts/config","#liste",["attr"=>"data-ajax"]);
+				$table->asForm();
+				$table->submitOnClick("Information","VirtualHosts/config","#liste");
 
 
 		
