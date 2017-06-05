@@ -3,6 +3,7 @@
 use Ajax\Semantic;
 use Ajax\semantic\html\collections\form\HtmlFormDropdown;
 use Ajax\service\JArray;
+use Ajax\semantic\html\base\constants\Style;
 
 class ConfigController extends ControllerBase
 {
@@ -37,7 +38,7 @@ class ConfigController extends ControllerBase
 		
 		$btnAddHost = $semantic->htmlButton("btnAddHost","Ajouter une machine","ui basic button");
 		$btnAddHost->addIcon("icon add",false,true);
-		$btnAddHost->getOnClick("Config/addHost","#modifHost");
+		$btnAddHost->getOnClick("Config/addHost","#liste");
 		
 		
 		
@@ -141,6 +142,10 @@ class ConfigController extends ControllerBase
 		$btdel->addIcon("remove",false,true);
 		$btdel->getOnClick("Config/deleteHost/".$machine->getId(),"#modifHost");
 		
+		$btAddServ=$semantic->htmlButton("btAddServ","Ajouter un serveur");
+		$btAddServ->addIcon("add",false,true);
+		$btAddServ->getOnClick("Config/addServ/".$machine->getId(),"#modifHost");
+		
 		$titre=$semantic->htmlHeader("",3,"Liste des virtualhosts pour la machine ".$machine->getName())->setAttachment($segment,"top");
 		$titre->addIcon("disk outline");
 		
@@ -148,6 +153,7 @@ class ConfigController extends ControllerBase
 		
 	
 		$form->addItem($btdel);
+		$form->addItem($btAddServ);
 		
 		if (count(Server::find("idHost=".$machine->getId()))==0){
 			$mess=$semantic->htmlMessage("mess5","Aucun Virtualhost disponible pour cette machine...");
@@ -183,12 +189,47 @@ class ConfigController extends ControllerBase
 		$label->addContent($table);
 		
 		$form->addItem($label);
+		
+
 		}
 
 		$this->jquery->compile($this->view);
 		
 		
 	}
+	
+	public function addServAction($machine){
+		
+		$Stype=Stype::find();
+		
+		$semantic=$this->semantic;
+		$semantic->setLanguage("fr");
+		$semantic->htmlMessage ( "messageInfo", "<b> Veuillez rentrer les informations de votre serveur.");
+		$form = $semantic->htmlForm("formAddServ");
+		$separation=$semantic->htmlDivider("");
+		$form->addItem($separation);
+		$form->setValidationParams(["on"=>"blur","inline"=>true]);
+		$form->addHeader("Ajouter un serveur",3);
+		$form->addInput("name","Nom","text","","Entrez le nom de votre machine")->addRule("empty");
+		$dd=$semantic->htmlDropdown("dd-12");
+		$items=Ajax\service\JArray::modelArray($Stype,"getId","getName");
+		$dd->addItems($items);
+		$dd->asSelect("idStype");
+		$form->addField($dd);
+		$form->addButton("btSub1","Ajouter")->asSubmit();
+		$form->submitOnClick("btSub1", "Config/createServ/".$machine, "#content-container");
+		$this->jquery->compile($this->view);
+	}
+	
+	public function createServAction($machine){
+		
+		$serv=new Server();
+	
+		$serv->setIdHost($machine);
+		$serv->save($_POST);
+		$this->response->redirect("$this->controller/index");
+	}
+	
 	
 	public function deleteHostAction($id){
 		$this->secondaryMenu($this->controller,$this->action);
